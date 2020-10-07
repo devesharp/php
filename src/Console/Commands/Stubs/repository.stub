@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Repositories;
+
+use Illuminate\Database\Capsule\Manager;
+
+/**
+ * Class Service.
+ *
+ * @method public                 Builder getModel()
+ * @method \App\Models\Service findById($id, $enabled = true)
+ * @method \App\Models\Service findIdOrFail($id, $enabled = true)
+ */
+class Service extends \Devesharp\Repository
+{
+    /**
+     * @var string
+     */
+    protected $model = \App\Models\Service::class;
+}

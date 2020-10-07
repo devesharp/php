@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Services;
+
+use Devesharp\CRUD;
+use Devesharp\Transformer;
+use Illuminate\Support\Carbon;
+
+class Service extends CRUD
+{
+    protected \App\Validators\Service $validator;
+    protected \App\Transformers\Service $transformer;
+    protected \App\Repositories\Service $repository;
+
+    //Sorts
+    public $sort = [
+        'id' => [
+            'column' => 'id',
+        ],
+    ];
+
+    public $sort_default = '-id';
+
+    public $filters = [
+        'id' => [
+            'column' => 'id',
+            'filter' => 'int',
+        ],
+    ];
+
+    public function __construct(
+        \App\Validators\Service $validator,
+        \App\Transformers\Service $transformer,
+        \App\Repositories\Service $repository
+    ) {
+        $this->validator = $validator;
+        $this->transformer = $transformer;
+        $this->repository = $repository;
+    }
+
+    public function create(array $originalData, $requester)
+    {
+        $data = $this->validator->create($originalData, $requester);
+
+        // Criar Model
+        $model = $this->repository->create(
+            $data->toArray(),
+        );
+
+        return $model->toArray();
+    }
+
+    public function update(
+        int $id,
+        array $originalData,
+        \App\Models\User $user
+    ) {
+        $propertyModel = $this->repository->findIdOrFail($id);
+
+        // Validação Dados
+        $data = $this->validator->update($originalData, $user);
+
+        // Atualizar Model
+        $this->repository->updateById($id, $data->toArray());
+
+        $model = $this->repository->findById($id);
+
+        return $model->toArray();
+    }
+
+    public function get(int $id, $receiver, $context = 'default')
+    {
+        // Resgatar recurso
+        $property = $this->repository->findIdOrFail($id);
+
+        return Transformer::item(
+            $property,
+            $this->transformer,
+            $context,
+            $receiver,
+        );
+    }
+
+    public function search(array $originalData = [], $requester)
+    {
+        // Validação dos dados
+        $data = $this->validator->search($originalData, $requester);
+
+        $query = $this->makeSearch($data, $requester);
+
+        $response = $this->transformerSearch(
+            $query,
+            $this->transformer,
+            'default',
+            $requester,
+        );
+
+        return $response;
+    }
+
+
+    public function delete($id, \App\Models\User $user)
+    {
+        $this->repository->updateById($id, ['enabled' => false]);
+
+        return true;
+    }
+}

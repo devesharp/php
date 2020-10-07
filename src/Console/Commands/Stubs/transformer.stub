@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Transformers;
+
+class Service extends \Devesharp\Transformer
+{
+    public $model = \App\Models\Service::class;
+
+    /**
+     * @param $model
+     * @param string $context
+     * @param null $requester
+     * @return mixed
+     * @throws \Exception
+     */
+    public function transform(
+        $model,
+        string $context = 'default',
+        $requester = null
+    ) {
+        if (! $model instanceof $this->model) {
+            throw new \Exception('invalid model transform');
+        }
+
+        return $model->toArray();
+    }
+}

@@ -2,11 +2,15 @@
 
 namespace Devesharp;
 
+use Devesharp\Repository\RepositoryInterface;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Str;
 
 class CRUD
 {
+    public RepositoryInterface $repository;
+    public Validators $validator;
+
     /**
      * Sorts permitidas.
      *
@@ -220,7 +224,7 @@ class CRUD
     public function actionResource($target, $auth = null)
     {
         if (empty($target)) {
-            Exception::NotFound();
+            throw new \Devesharp\Exception('Resource not found', \Devesharp\Exception::NOT_FOUND_RESOURCE);
         }
 
         /*
@@ -228,7 +232,7 @@ class CRUD
          */
         if (is_numeric($target)) {
             $query = $this->makeSearch($data, $auth);
-            if ($query instanceof Repository) {
+            if ($query instanceof RepositoryInterface) {
                 $query->whereInt($query->tableName . '.id', $target);
             } else {
                 $query->whereInt('id', $target);
@@ -238,10 +242,10 @@ class CRUD
 
             // Deve ser array numerica
             if (! is_numeric_array($target) && ! is_numeric_string($target)) {
-                Exception::Exception(Exception::DATA_ERROR_GENERAL);
+                throw new \Devesharp\Exception('Resource not found', \Devesharp\Exception::DATA_ERROR_GENERAL);
             }
 
-            if ($query instanceof Repository) {
+            if ($query instanceof RepositoryInterface) {
                 $query->whereArrayInt($query->tableName . '.id', $target);
             } else {
                 $query->whereArrayInt('id', $target);
@@ -258,11 +262,11 @@ class CRUD
 
             $query = $this->makeSearch($target, $auth);
         } else {
-            Exception::Exception(Exception::DATA_ERROR_GENERAL);
+            throw new \Devesharp\Exception('Resource not found', \Devesharp\Exception::DATA_ERROR_GENERAL);
         }
 
         if (0 === (clone $query)->count()) {
-            Exception::NotFound();
+            throw new \Devesharp\Exception('Resource not found', \Devesharp\Exception::NOT_FOUND_RESOURCE);
         }
 
         return $query;
@@ -270,7 +274,7 @@ class CRUD
 
     /**
      * @param  array|null $body
-     * @return Repository
+     * @return RepositoryInterface
      */
     public function getQuerySearch(array $body = null)
     {

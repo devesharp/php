@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Validators;
+
+
+class Service extends \Devesharp\Validators
+{
+    protected $rules = [
+        'create' => [
+            'name' => 'string|max:100|required',
+            'key' => 'string|max:100|required',
+            'image' => 'string|max:200|required',
+            'favorite' => 'boolean',
+            'archived' => 'boolean',
+        ],
+        'update' => [
+            '_extends' => 'create',
+            'id' => 'numeric',
+        ],
+        // Busca
+        'search' => [
+            'filters.onlyFeaturedHome' => 'boolean',
+        ],
+    ];
+
+
+    public function create(array $data, $requester)
+    {
+        $context = 'create';
+
+        return $this->validate($data, $this->getValidate($context));
+    }
+
+    public function update(array $data, $requester)
+    {
+        $context = 'update';
+
+        return $this->validate($data, $this->getValidate($context));
+    }
+
+    public function search(array $data, $requester)
+    {
+        return $this->validate($data, $this->getValidateWithSearch('search'));
+    }
+}
