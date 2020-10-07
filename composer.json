@@ -1,4 +1,12 @@
 {
     "name": "devesharp/php",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Devesharp\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "illuminate/database": "^8.7"
+    }
 }
