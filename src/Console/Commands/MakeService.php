@@ -13,7 +13,7 @@ class MakeService extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:service';
+    protected $name = 'ds:service';
 
     /**
      * The console command description.
@@ -78,9 +78,9 @@ class MakeService extends GeneratorCommand
 
     public function handle()
     {
-        $this->callSilent('make:validator', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('make:transformer', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('make:repository', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:validator', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:transformer', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
 
         return parent::handle();
     }

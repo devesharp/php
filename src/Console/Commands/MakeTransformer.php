@@ -13,7 +13,7 @@ class MakeTransformer extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:transformer';
+    protected $name = 'ds:transformer';
 
     /**
      * The console command description.

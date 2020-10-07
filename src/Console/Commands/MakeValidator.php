@@ -13,7 +13,7 @@ class MakeValidator extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:validator';
+    protected $name = 'ds:validator';
 
     /**
      * The console command description.

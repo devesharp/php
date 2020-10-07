@@ -13,7 +13,7 @@ class MakeRepository extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:repository';
+    protected $name = 'ds:repository';
 
     /**
      * The console command description.
