@@ -27,7 +27,7 @@ class MakeService extends GeneratorCommand
      *
      * @var string
      */
-    protected $type = 'Service';
+    protected $type = 'ServiceModel';
 
     /**
      * Replace the class name for the given stub.
