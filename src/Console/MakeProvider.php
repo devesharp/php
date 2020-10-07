@@ -20,8 +20,8 @@ class MakeProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                MakeRepository::class,
                 MakeService::class,
+                MakeRepository::class,
                 MakeTransformer::class,
                 MakeValidator::class,
             ]);

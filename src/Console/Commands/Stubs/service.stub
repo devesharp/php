@@ -6,11 +6,11 @@ use Devesharp\CRUD;
 use Devesharp\Transformer;
 use Illuminate\Support\Carbon;
 
-class Service extends CRUD
+class ServiceName extends CRUD
 {
-    protected \App\Validators\Service $validator;
-    protected \App\Transformers\Service $transformer;
-    protected \App\Repositories\Service $repository;
+    protected \App\Validators\ServiceName $validator;
+    protected \App\Transformers\ServiceName $transformer;
+    protected \App\Repositories\ServiceName $repository;
 
     //Sorts
     public $sort = [
@@ -29,9 +29,9 @@ class Service extends CRUD
     ];
 
     public function __construct(
-        \App\Validators\Service $validator,
-        \App\Transformers\Service $transformer,
-        \App\Repositories\Service $repository
+        \App\Validators\ServiceName $validator,
+        \App\Transformers\ServiceName $transformer,
+        \App\Repositories\ServiceName $repository
     ) {
         $this->validator = $validator;
         $this->transformer = $transformer;
