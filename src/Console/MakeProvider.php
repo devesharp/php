@@ -2,6 +2,10 @@
 
 namespace Devesharp\Console;
 
+use Devesharp\Console\Commands\MakeRepository;
+use Devesharp\Console\Commands\MakeService;
+use Devesharp\Console\Commands\MakeTransformer;
+use Devesharp\Console\Commands\MakeValidator;
 use UpInside\LaravelMakeTrait\Commands\TraitMakeCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +20,10 @@ class MakeProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                TraitMakeCommand::class,
+                MakeRepository::class,
+                MakeService::class,
+                MakeTransformer::class,
+                MakeValidator::class,
             ]);
         }
     }
