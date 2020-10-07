@@ -1,6 +1,6 @@
 <?php
 
-namespace Devesharp;
+namespace Devesharp\Console;
 
 use UpInside\LaravelMakeTrait\Commands\TraitMakeCommand;
 use Illuminate\Support\ServiceProvider;
