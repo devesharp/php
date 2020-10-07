@@ -1,6 +1,6 @@
 <?php
 
-namespace Devesharp\Repository;
+namespace Devesharp;
 
 class RepositoryMysql extends RepositoryInterface
 {
