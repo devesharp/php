@@ -6,11 +6,15 @@ use Devesharp\Repository\RepositoryInterface;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Str;
 
+/**
+ * Class Properties.
+ *
+ * @var RepositoryInterface $repository
+ * @var Validators $validator
+ */
+
 class CRUD
 {
-    public RepositoryInterface $repository;
-    public Validators $validator;
-
     /**
      * Sorts permitidas.
      *
