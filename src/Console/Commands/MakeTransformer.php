@@ -50,7 +50,7 @@ class MakeTransformer extends GeneratorCommand
      */
     protected function getStub()
     {
-        return  app_path() . '/Console/Commands/Stubs/transformer.stub';
+        return  __DIR__ . '/Stubs/transformer.stub';
     }
 
     /**

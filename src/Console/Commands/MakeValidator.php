@@ -50,7 +50,7 @@ class MakeValidator extends GeneratorCommand
      */
     protected function getStub()
     {
-        return  app_path() . '/Console/Commands/Stubs/validator.stub';
+        return  __DIR__ . '/Stubs/validator.stub';
     }
 
     /**

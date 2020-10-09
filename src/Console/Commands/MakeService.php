@@ -50,7 +50,7 @@ class MakeService extends GeneratorCommand
      */
     protected function getStub()
     {
-        return  app_path() . '/Console/Commands/Stubs/service.stub';
+        return  __DIR__ . '/Stubs/service.stub';
     }
 
     /**
