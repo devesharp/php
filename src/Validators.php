@@ -2,7 +2,7 @@
 
 namespace Devesharp;
 
-use Illuminate\Support\Collection;
+use Devesharp\Support\Collection;
 
 class Validators
 {

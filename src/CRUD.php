@@ -2,17 +2,16 @@
 
 namespace Devesharp;
 
-use Devesharp\Repository\RepositoryInterface;
+use Devesharp\Support\Collection;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Str;
 
 /**
- * Class Properties.
+ * Class CRUD.
  *
  * @var RepositoryInterface $repository
  * @var Validators $validator
  */
-
 class CRUD
 {
     /**
