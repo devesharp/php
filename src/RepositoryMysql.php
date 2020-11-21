@@ -1009,6 +1009,13 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
+    public function orderByRaw($column)
+    {
+        $this->modelQuery = $this->modelQuery->orderByRaw($column);
+
+        return $this;
+    }
+
     public function limit($limit = null)
     {
         if (! empty($limit)) {
