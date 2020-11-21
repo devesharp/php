@@ -114,6 +114,8 @@ abstract class RepositoryInterface
 
     abstract public function orderBy($column, $order);
 
+    abstract public function orderByRaw($column);
+
     abstract public function limit($limit = null);
 
     abstract public function offset($offset = null);
