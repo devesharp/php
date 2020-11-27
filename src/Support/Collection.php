@@ -25,7 +25,7 @@ class Collection extends \Illuminate\Support\Collection
     public function __unset($name)
     {
         if (Str::contains($name, '.')) {
-            $this->items = \array_exclude($this->items, $name);
+            $this->items = Helpers::arrayExclude($this->items, $name);
         } else {
             unset($this->items[$name]);
         }
@@ -54,7 +54,7 @@ class Collection extends \Illuminate\Support\Collection
     public function offsetUnset($name)
     {
         if (Str::contains($name, '.')) {
-            $this->items = \array_exclude($this->items, $name);
+            $this->items = Helpers::arrayExclude($this->items, $name);
         } else {
             unset($this->items[$name]);
         }

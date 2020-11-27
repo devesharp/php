@@ -1,52 +1,80 @@
 <?php
 
-if (! function_exists('searchable_string')) {
+namespace Devesharp\Support;
+
+class Helpers {
+
     /**
-     * @param  $string
+     * Remove espaços duplos, caracteres especiais e acentos e deixa minusculo de string
+     *
+     * @param $string
      * @return string|string[]|null
      */
-    function searchable_string($string)
+    static public function searchableString($string)
     {
-        $string = trim(\DS\Helper::normalizeString($string));
+        $string = trim(Helpers::normalizeString($string));
         $string = preg_replace('/\s+/', ' ', $string);
 
         return $string;
     }
-}
 
-if (! function_exists('array_filter_null')) {
+
     /**
-     * @param  array $array
+     * Normaliza string
+     *
+     * @param $str
+     * @return string
+     */
+    static public function normalizeString($str){
+        $str = Helpers::removeAccents($str);
+        $str = str_replace("-", " ", $str);
+        $str = preg_replace('/[^a-zA-Z0-9 ]+/', '', $str);
+        $str = trim($str);
+        $str = strtolower($str);
+
+        return $str;
+    }
+
+    /**
+     * Remove todos os acentos da string
+     *
+     * @param $str
+     * @return string
+     */
+    static public function removeAccents($str){
+        if(empty($str)) return $str;
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+    }
+
+    /**
+     * Remover valores null de array
+     *
+     * @param array $array
      * @return array
      */
-    function array_filter_null(array $array)
+    function arrayFilterNull(array $array)
     {
         foreach ($array as &$value) {
             if (is_array($value)) {
                 if (is_array_assoc($value)) {
-                    $value = array_filter_null($value);
+                    $value = Helpers::arrayFilterNull($value);
                 } else {
-                    $value = array_values(array_filter_null($value));
+                    $value = array_values(Helpers::arrayFilterNull($value));
                 }
             }
         }
 
         return array_filter($array, fn ($value) => null !== $value);
     }
-}
 
-if (! function_exists('array_only')) {
     /**
-     * Gets the value of an environment variable.
+     * Remove todas as keys que não estiverm em $keys
      *
-     * @param string $key
-     * @param mixed  $default
-     * @param mixed  $array
-     * @param mixed  $keys
-     *
-     * @return array|\App\Support\Collection
+     * @param $array
+     * @param $keys
+     * @return array|Collection
      */
-    function array_only($array, $keys)
+    public static function arrayOnly($array, $keys)
     {
         // Converte string em array
         if (is_string($keys)) {
@@ -55,7 +83,7 @@ if (! function_exists('array_only')) {
 
         // Verifica se é Collection ou Array
         $isCollection = false;
-        if ($array instanceof \App\Support\Collection) {
+        if ($array instanceof \Devesharp\Support\Collection) {
             $isCollection = true;
             $array = $array->toArray();
         }
@@ -77,8 +105,6 @@ if (! function_exists('array_only')) {
                     $_key === $keyD ||
                     preg_match('/' . $_key . '\.(.*)/', $keyD)
                 ) {
-                    //                var_dump($keyD);
-                    //                if ($_key === $keyD) {
                     $arrayOnly[$key] = $arrayDot[$key];
                 }
             }
@@ -91,19 +117,18 @@ if (! function_exists('array_only')) {
         }
 
         return $isCollection
-            ? new \App\Support\Collection($newArray)
+            ? new \Devesharp\Support\Collection($newArray)
             : $newArray;
     }
-}
 
-if (! function_exists('array_exclude')) {
     /**
+     * Remove todas as keys da array que estiverem em $keys
+     *
      * @param $array
      * @param $keys
-     *
-     * @return array|\App\Support\Collection
+     * @return array|Collection
      */
-    function array_exclude($array, $keys)
+    public static function arrayExclude($array, $keys)
     {
         // Converte string em array
         if (is_string($keys)) {
@@ -112,7 +137,7 @@ if (! function_exists('array_exclude')) {
 
         // Verifica se é Collection ou Array
         $isCollection = false;
-        if ($array instanceof \App\Support\Collection) {
+        if ($array instanceof \Devesharp\Support\Collection) {
             $isCollection = true;
             $array = $array->toArray();
         }
@@ -144,20 +169,17 @@ if (! function_exists('array_exclude')) {
         }
 
         return $isCollection
-            ? new \App\Support\Collection($newArray)
+            ? new \Devesharp\Support\Collection($newArray)
             : $newArray;
     }
-}
 
-if (! function_exists('is_array_assoc')) {
     /**
-     * Verificar se array é associativa.
+     * Verifica se array é associativa ou sequencial
      *
      * @param $arr
-     *
      * @return bool
      */
-    function is_array_assoc($arr)
+    public static function isArrayAssoc($arr)
     {
         if (! is_array($arr)) {
             return false;
@@ -165,71 +187,37 @@ if (! function_exists('is_array_assoc')) {
 
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
-}
 
-if (! function_exists('object_to_array')) {
     /**
-     * Converte objeto em array.
+     * Converte object apra array
      *
-     * @param  $object
-     * @return array
+     * @param $object
+     * @return mixed
      */
-    function object_to_array($object)
+    public static function objectToArray($object)
     {
         return json_decode(json_encode($object), true);
     }
-}
 
-if (! function_exists('env')) {
     /**
-     * Gets the value of an environment variable.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
+     * Remove espaços duplos
+     * @param $string
+     * @return string
      */
-    function env($key, $default = null)
-    {
-        return Env::get($key, $default);
-    }
-}
-
-if (! function_exists('trim_spaces')) {
-    function trim_spaces($string)
+    public static function trim_spaces($string)
     {
         $string = preg_replace('/\s+/', ' ', $string);
 
         return trim($string);
     }
-}
 
-if (! function_exists('config')) {
-    function config($key)
-    {
-        return \App\Support\Config::get($key);
-    }
-}
-
-if (! function_exists('is_numeric_array')) {
-    function is_numeric_array($value)
-    {
-        if (! is_array($value)) {
-            return false;
-        }
-
-        foreach ($value as $v) {
-            if (! is_int($v)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-if (! function_exists('is_numeric_string')) {
-    function is_numeric_string($value)
+    /**
+     * Verifica se array é uma array de strings
+     *
+     * @param $value
+     * @return bool
+     */
+    public static function isArrayString($value)
     {
         if (! is_array($value)) {
             return false;
@@ -237,6 +225,27 @@ if (! function_exists('is_numeric_string')) {
 
         foreach ($value as $v) {
             if (! is_string($v)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se array é uma array de numeros
+     *
+     * @param $value
+     * @return bool
+     */
+    public static function isArrayNumber($value)
+    {
+        if (! is_array($value)) {
+            return false;
+        }
+
+        foreach ($value as $v) {
+            if (! is_int($v) && ! is_float($v) && ! is_double($v)) {
                 return false;
             }
         }
@@ -258,7 +267,7 @@ if (! function_exists('validator')) {
      */
     function validator(array $data, array $rules)
     {
-        $validator = (new \App\Support\Validator())->make($data, $rules);
+        $validator = (new \Devesharp\Support\Validator())->make($data, $rules);
 
         $validator->addExtension('numeric_array', function (
             $attribute,
@@ -279,11 +288,9 @@ if (! function_exists('validator')) {
 
         return $validator;
     }
-}
 
-if (! function_exists('randomLetters')) {
     /**
-     * Gets random letters.
+     * Gerar uma quantidade $size de letras randomicas
      *
      * @param  int    $size
      * @return string
@@ -301,14 +308,14 @@ if (! function_exists('randomLetters')) {
 
         return $rand;
     }
-}
 
-if (! function_exists('only_number')) {
     /**
+     * Remove qualquer caracter que não seja um numero
+     *
      * @param $string
      * @return string|string[]|null
      */
-    function only_number($string)
+    function onlyNumers($string)
     {
         return preg_replace('/[^0-9]/', '', $string);
     }

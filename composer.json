@@ -13,6 +13,7 @@
     },
     "require": {
         "php": ">=7.4",
+        "ext-json": "*",
         "illuminate/database": "~5.0|~6.0|~7.0|^8.0"
     },
     "require-dev": {

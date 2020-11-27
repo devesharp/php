@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Support;
+namespace Tests\Support;
 
 use Devesharp\Support\Collection;
 
