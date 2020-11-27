@@ -2,57 +2,15 @@
 
 namespace Devesharp\CRUD;
 
+use Devesharp\CRUD\Repository\RepositoryInterface;
+use Devesharp\Support\Helpers;
+
 class Transformer
 {
-    protected $includes = [];
-    protected $excludes = [];
-    protected $only = [];
-
     /**
-     * List of resources possible to include.
-     *
-     * @var array
-     */
-    protected $availableIncludes = [];
-
-    protected function filter()
-    {
-    }
-
-    /**
-     * @param array $array
-     */
-    public function includes(array $array)
-    {
-        $this->includes = $array;
-
-        return $this;
-    }
-
-    /**
-     * @param array $array
-     */
-    public function excludes(array $array)
-    {
-        $this->excludes = $array;
-
-        return $this;
-    }
-
-    /**
-     * @param array $array
-     */
-    public function only(array $array)
-    {
-        $this->only = $array;
-
-        return $this;
-    }
-
-    /**
-     * @param  $model
-     * @param  string $context
-     * @param  null   $requester
+     * @param $model
+     * @param string $context
+     * @param null $requester
      * @return mixed
      */
     public function transform(
@@ -76,7 +34,7 @@ class Transformer
     ) {
         $transformed = [];
 
-        if (is_array_assoc($models)) {
+        if (Helpers::isArrayAssoc($models)) {
             foreach ($models as $key => $model) {
                 $transformed[$key] = $this->transform(
                     $model,

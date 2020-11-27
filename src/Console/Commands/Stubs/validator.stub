@@ -2,16 +2,15 @@
 
 namespace App\Validators;
 
+use Devesharp\CRUD\Validators;
 
-class Service extends \Devesharp\Validators
+class Service extends Validators
 {
-    protected $rules = [
+    protected array $rules = [
         'create' => [
             'name' => 'string|max:100|required',
-            'key' => 'string|max:100|required',
-            'image' => 'string|max:200|required',
-            'favorite' => 'boolean',
-            'archived' => 'boolean',
+            'age' => 'numeric|required',
+            'active' => 'boolean',
         ],
         'update' => [
             '_extends' => 'create',
@@ -19,26 +18,26 @@ class Service extends \Devesharp\Validators
         ],
         // Busca
         'search' => [
-            'filters.onlyFeaturedHome' => 'boolean',
+            'filters.name' => 'string',
         ],
     ];
 
 
-    public function create(array $data, $requester)
+    public function create(array $data, $requester = null)
     {
         $context = 'create';
 
         return $this->validate($data, $this->getValidate($context));
     }
 
-    public function update(array $data, $requester)
+    public function update(array $data, $requester = null)
     {
         $context = 'update';
 
-        return $this->validate($data, $this->getValidate($context));
+        return $this->validate($data, $this->removeRequiredRules($this->getValidate($context)));
     }
 
-    public function search(array $data, $requester)
+    public function search(array $data, $requester = null)
     {
         return $this->validate($data, $this->getValidateWithSearch('search'));
     }

@@ -3,8 +3,27 @@
 namespace Tests;
 
 //use PHPUnit\Framework\TestCase as BaseTestCase;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+
+        Schema::create('model_stubs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->integer('age');
+            $table->timestampsTz();
+        });
+    }
 }

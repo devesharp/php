@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Transformers;
+namespace Tests\CRUD\Mocks;
 
 use Devesharp\CRUD\Transformer;
 
-class Service extends \Devesharp\Transformer
+class TransformerStub extends Transformer
 {
-    public $model = \App\Models\Service::class;
+    public string $model = ModelStub::class;
 
     /**
      * @param $model
@@ -36,9 +36,9 @@ class Service extends \Devesharp\Transformer
         return $transform;
     }
 
-//    // Repository Mock
-//    public function loadFoo(array $users)
-//    {
-//        $this->loadResource('foo', app(RepositoryFooStub::class), $users);
-//    }
+    // Repository Mock
+    public function loadFoo(array $users)
+    {
+        $this->loadResource('foo', app(RepositoryFooStub::class), $users);
+    }
 }
