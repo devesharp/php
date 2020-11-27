@@ -52,11 +52,11 @@ class Helpers {
      * @param array $array
      * @return array
      */
-    function arrayFilterNull(array $array)
+    static public function arrayFilterNull(array $array)
     {
         foreach ($array as &$value) {
             if (is_array($value)) {
-                if (is_array_assoc($value)) {
+                if (\Devesharp\Support\Helpers::isArrayAssoc($value)) {
                     $value = Helpers::arrayFilterNull($value);
                 } else {
                     $value = array_values(Helpers::arrayFilterNull($value));
@@ -252,6 +252,50 @@ class Helpers {
 
         return true;
     }
+
+    /**
+     * Gerar uma quantidade $size de letras randomicas
+     *
+     * @param  int    $size
+     * @return string
+     */
+    public static function randomLetters(int $size)
+    {
+        $seed = str_split(
+            'abcdefghijklmnopqrstuvwxyz' . 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        ); // and any other characters
+        shuffle($seed); // probably optional since array_is randomized; this may be redundant
+        $rand = '';
+        foreach (array_rand($seed, $size) as $k) {
+            $rand .= $seed[$k];
+        }
+
+        return $rand;
+    }
+
+    /**
+     * Remove qualquer caracter que não seja um numero
+     *
+     * @param $string
+     * @return string|string[]|null
+     */
+    public static function onlyNumbers($string)
+    {
+        return preg_replace('/[^0-9]/', '', $string);
+    }
+
+    /**
+     * Converte string para url
+     * @param $str
+     * @return string|string[]
+     */
+    public static function convertUrl($str) {
+        $str = Helpers::normalizeString($str);
+
+        $str = str_replace(" ", "-", $str);
+
+        return $str;
+    }
 }
 
 if (! function_exists('validator')) {
@@ -287,36 +331,5 @@ if (! function_exists('validator')) {
         });
 
         return $validator;
-    }
-
-    /**
-     * Gerar uma quantidade $size de letras randomicas
-     *
-     * @param  int    $size
-     * @return string
-     */
-    function randomLetters(int $size)
-    {
-        $seed = str_split(
-            'abcdefghijklmnopqrstuvwxyz' . 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        ); // and any other characters
-        shuffle($seed); // probably optional since array_is randomized; this may be redundant
-        $rand = '';
-        foreach (array_rand($seed, $size) as $k) {
-            $rand .= $seed[$k];
-        }
-
-        return $rand;
-    }
-
-    /**
-     * Remove qualquer caracter que não seja um numero
-     *
-     * @param $string
-     * @return string|string[]|null
-     */
-    function onlyNumers($string)
-    {
-        return preg_replace('/[^0-9]/', '', $string);
     }
 }
