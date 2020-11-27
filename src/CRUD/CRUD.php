@@ -1,6 +1,6 @@
 <?php
 
-namespace Devesharp;
+namespace Devesharp\CRUD;
 
 use Devesharp\Support\Collection;
 use Illuminate\Database\Capsule\Manager;

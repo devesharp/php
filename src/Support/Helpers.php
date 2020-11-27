@@ -298,38 +298,38 @@ class Helpers {
     }
 }
 
-if (! function_exists('validator')) {
-    /**
-     * Gets the value of an validatorironment variable.
-     *
-     * @param string $key
-     * @param mixed  $default
-     * @param array  $data
-     * @param array  $rules
-     *
-     * @return Illuminate\Validation\Validator
-     */
-    function validator(array $data, array $rules)
-    {
-        $validator = (new \Devesharp\Support\Validator())->make($data, $rules);
-
-        $validator->addExtension('numeric_array', function (
-            $attribute,
-            $value,
-            $parameters
-        ) {
-            if (! is_array($value)) {
-                return false;
-            }
-            foreach ($value as $v) {
-                if (! is_int($v)) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
-        return $validator;
-    }
-}
+//if (! function_exists('validator')) {
+//    /**
+//     * Gets the value of an validatorironment variable.
+//     *
+//     * @param string $key
+//     * @param mixed  $default
+//     * @param array  $data
+//     * @param array  $rules
+//     *
+//     * @return Illuminate\Validation\Validator
+//     */
+//    function validator(array $data, array $rules)
+//    {
+//        $validator = (new \Devesharp\Support\Validator())->make($data, $rules);
+//
+//        $validator->addExtension('numeric_array', function (
+//            $attribute,
+//            $value,
+//            $parameters
+//        ) {
+//            if (! is_array($value)) {
+//                return false;
+//            }
+//            foreach ($value as $v) {
+//                if (! is_int($v)) {
+//                    return false;
+//                }
+//            }
+//
+//            return true;
+//        });
+//
+//        return $validator;
+//    }
+//}

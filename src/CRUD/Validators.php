@@ -1,45 +1,48 @@
 <?php
 
-namespace Devesharp;
+namespace Devesharp\CRUD;
 
 use Devesharp\Support\Collection;
+use Devesharp\Support\Helpers;
+use Illuminate\Support\Facades\Validator;
 
 class Validators
 {
     /**
-     * Rules.
-     *
+     * Rules
      * @var array
      */
-    protected $rules = [];
+    protected array $rules = [];
 
     /**
-     * Remover dados adicionais.
-     *
-     * @var bool
+     * Remover dados adicionais
      */
-    protected $additionalProperties = false;
+    protected bool $additionalProperties = false;
 
     /**
      * @param $_data
      * @param $rules
      * @param bool $requiredAll
      * @return Collection
-     * @throws \Devesharp\Exception
+     * @throws Exception
      */
     public function validate($_data, $rules, $requiredAll = false)
     {
         // Remove valores null
-        $_data = array_filter_null($_data);
+        $_data = Helpers::arrayFilterNull($_data);
 
         if (is_string($rules)) {
             $rules = $this->getValidate($rules);
         }
 
-        $validator = validator($_data, $rules);
+//        Validator::make()
+        $validator = Validator::make($_data, $rules);
 
         if ($validator->fails()) {
-            throw new \Devesharp\Exception('Error data validate', \Devesharp\Exception::DATA_ERROR, null, $validator->errors()->getMessages());
+            throw new \Devesharp\CRUD\Exception(
+                "Error on validate data:\n" . implode("\n", $validator->errors()->all()), \Devesharp\CRUD\Exception::DATA_ERROR,
+                null,
+                $validator->errors()->getMessages());
         }
 
         /*
@@ -48,7 +51,7 @@ class Validators
         if ($this->additionalProperties) {
             $data = $_data;
         } else {
-            $data = array_only(
+            $data = Helpers::arrayOnly(
                 (array) $_data,
                 $this->getValidateValues($rules),
             );

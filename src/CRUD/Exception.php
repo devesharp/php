@@ -1,6 +1,6 @@
 <?php
 
-namespace Devesharp;
+namespace Devesharp\CRUD;
 
 use Throwable;
 
