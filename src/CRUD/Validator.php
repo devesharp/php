@@ -6,7 +6,7 @@ use Devesharp\Support\Collection;
 use Devesharp\Support\Helpers;
 use Illuminate\Support\Facades\Validator;
 
-class Validators
+class Validator
 {
     /**
      * Rules

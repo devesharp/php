@@ -2,9 +2,9 @@
 
 namespace App\Validators;
 
-use Devesharp\CRUD\Validators;
+use Devesharp\CRUD\Validator;
 
-class Service extends Validators
+class Service extends Validator
 {
     protected array $rules = [
         'create' => [

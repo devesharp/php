@@ -2,9 +2,9 @@
 
 namespace Tests\CRUD\Mocks;
 
-use Devesharp\CRUD\Validators;
+use Devesharp\CRUD\Validator;
 
-class ValidatorStub extends Validators
+class ValidatorStub extends Validator
 {
     protected array $rules = [
         'create' => [

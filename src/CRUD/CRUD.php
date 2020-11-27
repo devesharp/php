@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
  * Class CRUD.
  *
  * @var RepositoryInterface $repository
- * @var Validators $validator
+ * @var Validator $validator
  */
 class CRUD
 {
