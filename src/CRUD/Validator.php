@@ -4,7 +4,7 @@ namespace Devesharp\CRUD;
 
 use Devesharp\Support\Collection;
 use Devesharp\Support\Helpers;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator as ValidatorLaravel;
 
 class Validator
 {
@@ -35,8 +35,7 @@ class Validator
             $rules = $this->getValidate($rules);
         }
 
-//        Validator::make()
-        $validator = Validator::make($_data, $rules);
+        $validator = ValidatorLaravel::make($_data, $rules);
 
         if ($validator->fails()) {
             throw new \Devesharp\CRUD\Exception(

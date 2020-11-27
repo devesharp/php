@@ -2,6 +2,9 @@
 
 namespace Devesharp\CRUD\Repository;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+
 class RepositoryMysql extends RepositoryInterface
 {
     protected $noEnabled = false;
@@ -9,12 +12,12 @@ class RepositoryMysql extends RepositoryInterface
     protected $softDelete = true;
 
     /**
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var Model
      */
     protected $model = null;
 
     /**
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var Builder
      */
     protected $modelQuery = null;
 
@@ -74,7 +77,7 @@ class RepositoryMysql extends RepositoryInterface
      * @param $id
      * @param bool $enabled
      *
-     * @throws \App\Handlers\Exception
+     * @throws \Devesharp\CRUD\Exception
      *
      * @return null
      */
@@ -83,7 +86,7 @@ class RepositoryMysql extends RepositoryInterface
         $model = $this->findById($id, $enabled);
 
         if (empty($model)) {
-            \App\Handlers\Exception::NotFound();
+            \Devesharp\CRUD\Exception::NotFound();
         }
 
         return $model;
@@ -763,7 +766,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->havingRaw($query, $value);
 
         return $this;
@@ -777,7 +780,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` not in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" not in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->havingRaw($query, $value);
 
         return $this;
@@ -790,7 +793,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->havingRaw($query, $value);
 
         return $this;
@@ -803,7 +806,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` not in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" not in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->havingRaw($query, $value);
 
         return $this;
@@ -952,7 +955,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->orHavingRaw($query, $value);
 
         return $this;
@@ -966,7 +969,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` not in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" not in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->orHavingRaw($query, $value);
 
         return $this;
@@ -979,7 +982,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->orHavingRaw($query, $value);
 
         return $this;
@@ -992,7 +995,7 @@ class RepositoryMysql extends RepositoryInterface
             return '?';
         }, $bind);
 
-        $query = '`' . $column . '` not in (' . implode(', ', $bind) . ')';
+        $query = '"' . $column . '" not in (' . implode(', ', $bind) . ')';
         $this->modelQuery = $this->modelQuery->orHavingRaw($query, $value);
 
         return $this;
