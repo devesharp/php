@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Tests\CRUD\Mocks;
 
 use Devesharp\CRUD\Service;
 use Devesharp\CRUD\ServiceFilterEnum;
@@ -8,12 +8,12 @@ use Devesharp\CRUD\Transformer;
 use Devesharp\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class ServiceName extends Service
+class ServiceStub extends Service
 {
-    protected \App\Validators\ServiceName $validator;
-    protected \App\Transformers\ServiceName $transformer;
-    protected \App\Repositories\ServiceName $repository;
-    protected \App\Policies\ServiceName $policy;
+    protected ValidatorStub $validator;
+    protected TransformerStub $transformer;
+    protected RepositoryStub $repository;
+    protected PolicyStub $policy;
 
     public array $sort = [
         'id' => [
@@ -41,10 +41,10 @@ class ServiceName extends Service
     ];
 
     public function __construct(
-        \App\Validators\ServiceName $validator,
-        \App\Transformers\ServiceName $transformer,
-        \App\Repositories\ServiceName $repository,
-        \App\Policies\ServiceName $policy
+        ValidatorStub $validator,
+        TransformerStub $transformer,
+        RepositoryStub $repository,
+        PolicyStub $policy
     ) {
         $this->validator = $validator;
         $this->transformer = $transformer;
@@ -195,11 +195,11 @@ class ServiceName extends Service
     /**
      * @param $data
      * @param null $requester
-     * @return \Devesharp\CRUD\RepositoryInterface|\App\Repositories\ServiceName
+     * @return \Devesharp\CRUD\RepositoryInterface|RepositoryStub
      */
     protected function makeSearch(&$data, $requester = null)
     {
-        /** @var \App\Repositories\ServiceName $query */
+        /** @var RepositoryStub $query */
         $query = parent::makeSearch($data, $requester);
 
 //        // Example Query
@@ -224,8 +224,8 @@ class ServiceName extends Service
             // Authorization
             $this->policy->delete($requester, $model);
 
-            $this->repository->updateById($id, ['enabled' => false]);
-//            $this->repository->deleteById($id, $requester);
+//            $this->repository->updateById($id, ['enabled' => false]);
+            $this->repository->deleteById($id, $requester);
 
             DB::commit();
 

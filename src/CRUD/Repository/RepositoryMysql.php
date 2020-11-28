@@ -7,8 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class RepositoryMysql extends RepositoryInterface
 {
-    protected $noEnabled = false;
+    /**
+     * @var bool Verifica se tabela está deletada por "enabled"
+     */
+    protected bool $disableEnabledColumn = false;
 
+    /**
+     * @var bool Ao invés de deletar coluna, apenas atualiza enabled = false
+     */
     protected $softDelete = true;
 
     /**
@@ -54,6 +60,7 @@ class RepositoryMysql extends RepositoryInterface
     public function findById($id, $enabled = true)
     {
         $this->clearQuery();
+
         $model = $this->modelQuery
             ->where((new $this->model())->getTable() . '.id', intval($id))
             ->limit(1)
@@ -63,7 +70,7 @@ class RepositoryMysql extends RepositoryInterface
             ! empty($model) &&
             $enabled &&
             ! $model->enabled &&
-            ! $this->noEnabled
+            ! $this->disableEnabledColumn
         ) {
             return null;
         }
@@ -94,7 +101,7 @@ class RepositoryMysql extends RepositoryInterface
 
     public function findOne($enabled = true)
     {
-        if ($enabled && ! $this->noEnabled) {
+        if ($enabled && ! $this->disableEnabledColumn) {
             $this->whereBoolean($this->tableName . '.enabled', true);
         }
 
@@ -106,7 +113,7 @@ class RepositoryMysql extends RepositoryInterface
             ! empty($model) &&
             $enabled &&
             ! $model->enabled &&
-            ! $this->noEnabled
+            ! $this->disableEnabledColumn
         ) {
             return null;
         }
@@ -116,7 +123,7 @@ class RepositoryMysql extends RepositoryInterface
 
     public function findMany($enabled = true)
     {
-        if ($enabled && ! $this->noEnabled) {
+        if ($enabled && ! $this->disableEnabledColumn) {
             $this->whereBoolean($this->tableName . '.enabled', true);
         }
 
@@ -205,139 +212,146 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereNull($column)
+    public function whereNull($column): self
     {
         $this->modelQuery = $this->modelQuery->whereNull($column);
 
         return $this;
     }
 
-    public function whereNotNull($column)
+    public function whereNotNull($column): self
     {
         $this->modelQuery = $this->modelQuery->whereNotNull($column);
 
         return $this;
     }
 
-    public function whereBoolean($column, $value)
+    public function whereBoolean($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, $value ? 1 : 0);
 
         return $this;
     }
 
-    public function whereDate($column, $value)
+    public function whereDate($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, $value);
 
         return $this;
     }
 
-    public function whereDateGt($column, $value)
+    public function whereDateGt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, '>', $value);
 
         return $this;
     }
 
-    public function whereDateGte($column, $value)
+    public function whereDateGte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, '>=', $value);
 
         return $this;
     }
 
-    public function whereDateLt($column, $value)
+    public function whereDateLt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, '<', $value);
 
         return $this;
     }
 
-    public function whereDateLte($column, $value)
+    public function whereDateLte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, '<=', $value);
 
         return $this;
     }
 
-    public function whereInt($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where($column, intval($value));
-
-        return $this;
-    }
-
-    public function whereIntGt($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where(
-            $column,
-            '>',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function whereIntGte($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where(
-            $column,
-            '>=',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function whereIntLt($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where(
-            $column,
-            '<',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function whereIntLte($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where(
-            $column,
-            '<=',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function whereNotInt($column, $value)
-    {
-        $this->modelQuery = $this->modelQuery->where(
-            $column,
-            '!=',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function whereSameString($column, $value)
+    public function whereEqual($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, $value);
 
         return $this;
     }
 
-    public function whereLike($column, $value)
+    public function whereInt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where($column, intval($value));
+
+        return $this;
+    }
+
+    public function whereIntGt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '>',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereIntGte($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '>=',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereIntLt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '<',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereIntLte($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '<=',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereNotInt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '!=',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereSameString($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where($column, $value);
+
+        return $this;
+    }
+
+    public function whereLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where($column, 'LIKE', $value);
 
         return $this;
     }
 
-    public function whereNotLike($column, $value)
+    public function whereNotLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where(
             $column,
@@ -348,7 +362,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereBeginWithLike($column, $value)
+    public function whereBeginWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where(
             $column,
@@ -359,7 +373,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereEndWithLike($column, $value)
+    public function whereEndWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where(
             $column,
@@ -370,7 +384,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereContainsLike($column, $value)
+    public function whereContainsLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->where(
             $column,
@@ -381,7 +395,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereContainsExplodeString($column, $value)
+    public function whereContainsExplodeString($column, $value): self
     {
         $value = '%' . str_replace(' ', '%', $value) . '%';
         $this->modelQuery = $this->modelQuery->where($column, 'LIKE', $value);
@@ -389,7 +403,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereArrayInt($column, $value)
+    public function whereArrayInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->whereIn($column, $value);
@@ -397,7 +411,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereArrayNotInt($column, $value)
+    public function whereArrayNotInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->whereNotIn($column, $value);
@@ -405,35 +419,35 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function whereArrayString($column, $value)
+    public function whereArrayString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->whereIn($column, $value);
 
         return $this;
     }
 
-    public function whereArrayNotString($column, $value)
+    public function whereArrayNotString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->whereNotIn($column, $value);
 
         return $this;
     }
 
-    public function orWhereBoolean($column, $value)
+    public function orWhereBoolean($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere($column, $value ? 1 : 0);
 
         return $this;
     }
 
-    public function orWhereInt($column, $value)
+    public function orWhereInt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere($column, intval($value));
 
         return $this;
     }
 
-    public function orWhereNotInt($column, $value)
+    public function orWhereNotInt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -444,7 +458,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereIntGt($column, $value)
+    public function orWhereIntGt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -455,7 +469,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereIntGte($column, $value)
+    public function orWhereIntGte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -466,7 +480,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereIntLt($column, $value)
+    public function orWhereIntLt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -477,7 +491,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereIntLte($column, $value)
+    public function orWhereIntLte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -488,21 +502,21 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereSameString($column, $value)
+    public function orWhereSameString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere($column, $value);
 
         return $this;
     }
 
-    public function orWhereLike($column, $value)
+    public function orWhereLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere($column, 'LIKE', $value);
 
         return $this;
     }
 
-    public function orWhereNotLike($column, $value)
+    public function orWhereNotLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -513,7 +527,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereBeginWithLike($column, $value)
+    public function orWhereBeginWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -524,7 +538,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereEndWithLike($column, $value)
+    public function orWhereEndWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -535,7 +549,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereContainsLike($column, $value)
+    public function orWhereContainsLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhere(
             $column,
@@ -546,7 +560,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereContainsExplodeString($column, $value)
+    public function orWhereContainsExplodeString($column, $value): self
     {
         $value = '%' . str_replace(' ', '%', $value) . '%';
         $this->modelQuery = $this->modelQuery->orWhere($column, 'LIKE', $value);
@@ -554,7 +568,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereArrayInt($column, $value)
+    public function orWhereArrayInt($column, $value): self
     {
         if (! is_array($value)) {
             $this->modelQuery = $this->modelQuery->orWhereRaw(
@@ -569,7 +583,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereArrayNotInt($column, $value)
+    public function orWhereArrayNotInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->orWhereNotIn($column, $value);
@@ -577,21 +591,21 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orWhereArrayString($column, $value)
+    public function orWhereArrayString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhereIn($column, $value);
 
         return $this;
     }
 
-    public function orWhereArrayNotString($column, $value)
+    public function orWhereArrayNotString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orWhereNotIn($column, $value);
 
         return $this;
     }
 
-    public function orWhere($callback)
+    public function orWhere($callback): self
     {
         $that = $this;
         $this->modelQuery = $this->modelQuery->orWhere(function ($model) use (
@@ -605,7 +619,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function andWhere($callback)
+    public function andWhere($callback): self
     {
         $that = $this;
         $this->modelQuery = $this->modelQuery->where(function ($model) use (
@@ -619,35 +633,35 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingNull($column)
+    public function havingNull($column): self
     {
         $this->modelQuery = $this->modelQuery->havingRaw($column . ' IS NULL');
 
         return $this;
     }
 
-    public function havingNotNull($column)
+    public function havingNotNull($column): self
     {
         $this->modelQuery = $this->modelQuery->havingRaw($column . ' IS NOT NULL');
 
         return $this;
     }
 
-    public function havingBoolean($column, $value)
+    public function havingBoolean($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, $value ? 1 : 0);
 
         return $this;
     }
 
-    public function havingInt($column, $value)
+    public function havingInt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, intval($value));
 
         return $this;
     }
 
-    public function havingIntGt($column, $value)
+    public function havingIntGt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -658,7 +672,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingIntGte($column, $value)
+    public function havingIntGte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -669,7 +683,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingIntLt($column, $value)
+    public function havingIntLt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -680,7 +694,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingIntLte($column, $value)
+    public function havingIntLte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -691,21 +705,21 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingSameString($column, $value)
+    public function havingSameString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, $value);
 
         return $this;
     }
 
-    public function havingLike($column, $value)
+    public function havingLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, 'LIKE', $value);
 
         return $this;
     }
 
-    public function havingNotLike($column, $value)
+    public function havingNotLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -716,7 +730,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingBeginWithLike($column, $value)
+    public function havingBeginWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -727,7 +741,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingEndWithLike($column, $value)
+    public function havingEndWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -738,7 +752,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingContainsLike($column, $value)
+    public function havingContainsLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having(
             $column,
@@ -749,7 +763,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingContainsExplodeString($column, $value)
+    public function havingContainsExplodeString($column, $value): self
     {
         $value = '%' . str_replace(' ', '%', $value) . '%';
 
@@ -758,7 +772,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingArrayInt($column, $value)
+    public function havingArrayInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
@@ -772,7 +786,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingArrayNotInt($column, $value)
+    public function havingArrayNotInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
@@ -786,7 +800,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingArrayString($column, $value)
+    public function havingArrayString($column, $value): self
     {
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -799,7 +813,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function havingArrayNotString($column, $value)
+    public function havingArrayNotString($column, $value): self
     {
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -812,14 +826,14 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingBoolean($column, $value)
+    public function orHavingBoolean($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, $value ? 1 : 0);
 
         return $this;
     }
 
-    public function orHavingInt($column, $value)
+    public function orHavingInt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -829,7 +843,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingIntGt($column, $value)
+    public function orHavingIntGt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -840,7 +854,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingIntGte($column, $value)
+    public function orHavingIntGte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -851,7 +865,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingIntLt($column, $value)
+    public function orHavingIntLt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -862,7 +876,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingIntLte($column, $value)
+    public function orHavingIntLte($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -873,14 +887,14 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingSameString($column, $value)
+    public function orHavingSameString($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving($column, $value);
 
         return $this;
     }
 
-    public function orHavingLike($column, $value)
+    public function orHavingLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -891,7 +905,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingNotLike($column, $value)
+    public function orHavingNotLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -902,7 +916,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingBeginWithLike($column, $value)
+    public function orHavingBeginWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -913,7 +927,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingEndWithLike($column, $value)
+    public function orHavingEndWithLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -924,7 +938,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingContainsLike($column, $value)
+    public function orHavingContainsLike($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
@@ -935,7 +949,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingContainsExplodeString($column, $value)
+    public function orHavingContainsExplodeString($column, $value): self
     {
         $value = '%' . str_replace(' ', '%', $value) . '%';
         $this->modelQuery = $this->modelQuery->orHaving(
@@ -947,7 +961,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingArrayInt($column, $value)
+    public function orHavingArrayInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
@@ -961,7 +975,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingArrayNotInt($column, $value)
+    public function orHavingArrayNotInt($column, $value): self
     {
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
@@ -975,7 +989,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingArrayString($column, $value)
+    public function orHavingArrayString($column, $value): self
     {
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -988,7 +1002,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orHavingArrayNotString($column, $value)
+    public function orHavingArrayNotString($column, $value): self
     {
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -1001,7 +1015,7 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orderBy($column, $order)
+    public function orderBy($column, $order): self
     {
         if ('asc' === $order) {
             $this->modelQuery = $this->modelQuery->orderBy($column, $order);
@@ -1012,14 +1026,14 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function orderByRaw($column)
+    public function orderByRaw($column): self
     {
         $this->modelQuery = $this->modelQuery->orderByRaw($column);
 
         return $this;
     }
 
-    public function limit($limit = null)
+    public function limit($limit = null): self
     {
         if (! empty($limit)) {
             $this->modelQuery = $this->modelQuery->limit($limit);
@@ -1028,16 +1042,16 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
-    public function offset($offset = null)
+    public function offset($offset = null): self
     {
         $this->modelQuery = $this->modelQuery->offset($offset);
 
         return $this;
     }
 
-    public function count($enabled = true)
+    public function count($enabled = true): int
     {
-        if ($enabled && ! $this->noEnabled) {
+        if ($enabled && ! $this->disableEnabledColumn) {
             $this->whereBoolean($this->tableName . '.enabled', true);
         }
 
@@ -1046,7 +1060,7 @@ class RepositoryMysql extends RepositoryInterface
 
     public function cursor($enabled = true)
     {
-        if ($enabled && ! $this->noEnabled) {
+        if ($enabled && ! $this->disableEnabledColumn) {
             $this->whereBoolean($this->tableName . '.enabled', true);
         }
 
@@ -1055,7 +1069,7 @@ class RepositoryMysql extends RepositoryInterface
 
     public function increment(string $column, $amount = 1, $enabled = true)
     {
-        if ($enabled && ! $this->noEnabled) {
+        if ($enabled && ! $this->disableEnabledColumn) {
             $this->whereBoolean($this->tableName . '.enabled', true);
         }
 

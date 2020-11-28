@@ -32,95 +32,97 @@ abstract class RepositoryInterface
 
     abstract public function deleteById($id);
 
-    abstract public function whereNull($column);
+    abstract public function whereNull($column): self;
 
-    abstract public function whereNotNull($column);
+    abstract public function whereNotNull($column): self;
 
-    abstract public function whereBoolean($column, $value);
+    abstract public function whereBoolean($column, $value): self;
 
-    abstract public function whereInt($column, $value);
+    abstract public function whereEqual($column, $value): self;
 
-    abstract public function whereIntGt($column, $value);
+    abstract public function whereInt($column, $value): self;
 
-    abstract public function whereIntGte($column, $value);
+    abstract public function whereIntGt($column, $value): self;
 
-    abstract public function whereIntLt($column, $value);
+    abstract public function whereIntGte($column, $value): self;
 
-    abstract public function whereIntLte($column, $value);
+    abstract public function whereIntLt($column, $value): self;
 
-    abstract public function whereNotInt($column, $value);
+    abstract public function whereIntLte($column, $value): self;
 
-    abstract public function whereSameString($column, $value);
+    abstract public function whereNotInt($column, $value): self;
 
-    abstract public function whereLike($column, $value);
+    abstract public function whereSameString($column, $value): self;
 
-    abstract public function whereNotLike($column, $value);
+    abstract public function whereLike($column, $value): self;
 
-    abstract public function whereBeginWithLike($column, $value);
+    abstract public function whereNotLike($column, $value): self;
 
-    abstract public function whereEndWithLike($column, $value);
+    abstract public function whereBeginWithLike($column, $value): self;
 
-    abstract public function whereContainsLike($column, $value);
+    abstract public function whereEndWithLike($column, $value): self;
 
-    abstract public function whereContainsExplodeString($column, $value);
+    abstract public function whereContainsLike($column, $value): self;
 
-    abstract public function whereArrayInt($column, $value);
+    abstract public function whereContainsExplodeString($column, $value): self;
 
-    abstract public function whereArrayNotInt($column, $value);
+    abstract public function whereArrayInt($column, $value): self;
 
-    abstract public function whereArrayString($column, $value);
+    abstract public function whereArrayNotInt($column, $value): self;
 
-    abstract public function whereArrayNotString($column, $value);
+    abstract public function whereArrayString($column, $value): self;
 
-    abstract public function orWhereBoolean($column, $value);
+    abstract public function whereArrayNotString($column, $value): self;
 
-    abstract public function orWhereInt($column, $value);
+    abstract public function orWhereBoolean($column, $value): self;
 
-    abstract public function orWhereNotInt($column, $value);
+    abstract public function orWhereInt($column, $value): self;
 
-    abstract public function orWhereIntGt($column, $value);
+    abstract public function orWhereNotInt($column, $value): self;
 
-    abstract public function orWhereIntGte($column, $value);
+    abstract public function orWhereIntGt($column, $value): self;
 
-    abstract public function orWhereIntLt($column, $value);
+    abstract public function orWhereIntGte($column, $value): self;
 
-    abstract public function orWhereIntLte($column, $value);
+    abstract public function orWhereIntLt($column, $value): self;
 
-    abstract public function orWhereSameString($column, $value);
+    abstract public function orWhereIntLte($column, $value): self;
 
-    abstract public function orWhereLike($column, $value);
+    abstract public function orWhereSameString($column, $value): self;
 
-    abstract public function orWhereNotLike($column, $value);
+    abstract public function orWhereLike($column, $value): self;
 
-    abstract public function orWhereBeginWithLike($column, $value);
+    abstract public function orWhereNotLike($column, $value): self;
 
-    abstract public function orWhereEndWithLike($column, $value);
+    abstract public function orWhereBeginWithLike($column, $value): self;
 
-    abstract public function orWhereContainsLike($column, $value);
+    abstract public function orWhereEndWithLike($column, $value): self;
 
-    abstract public function orWhereContainsExplodeString($column, $value);
+    abstract public function orWhereContainsLike($column, $value): self;
 
-    abstract public function orWhereArrayInt($column, $value);
+    abstract public function orWhereContainsExplodeString($column, $value): self;
 
-    abstract public function orWhereArrayNotInt($column, $value);
+    abstract public function orWhereArrayInt($column, $value): self;
 
-    abstract public function orWhereArrayString($column, $value);
+    abstract public function orWhereArrayNotInt($column, $value): self;
 
-    abstract public function orWhereArrayNotString($column, $value);
+    abstract public function orWhereArrayString($column, $value): self;
 
-    abstract public function orWhere($callback);
+    abstract public function orWhereArrayNotString($column, $value): self;
 
-    abstract public function andWhere($callback);
+    abstract public function orWhere($callback): self;
 
-    abstract public function orderBy($column, $order);
+    abstract public function andWhere($callback): self;
 
-    abstract public function orderByRaw($column);
+    abstract public function orderBy($column, $order): self;
 
-    abstract public function limit($limit = null);
+    abstract public function orderByRaw($column): self;
 
-    abstract public function offset($offset = null);
+    abstract public function limit($limit = null): self;
 
-    abstract public function count($enabled = true);
+    abstract public function offset($offset = null): self;
+
+    abstract public function count($enabled = true): int;
 
     abstract public function cursor($enabled = true);
 

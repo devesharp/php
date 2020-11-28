@@ -3,6 +3,7 @@
 namespace Tests;
 
 //use PHPUnit\Framework\TestCase as BaseTestCase;
+use Devesharp\Console\MakeProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -33,5 +34,10 @@ abstract class TestCase extends Orchestra
             $table->integer('age');
             $table->timestampsTz();
         });
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [MakeProvider::class];
     }
 }

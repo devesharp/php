@@ -2,50 +2,38 @@
 
 namespace Devesharp\CRUD;
 
+use Devesharp\CRUD\Repository\RepositoryInterface;
 use Devesharp\Support\Collection;
-use Illuminate\Database\Capsule\Manager;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Class CRUD.
+ * Class Service.
  *
  * @var RepositoryInterface $repository
  * @var Validator $validator
  */
-class CRUD
+class Service
 {
     /**
      * Sorts permitidas.
-     *
-     * @var array
      */
-    public $sort = [];
+    public array $sort = [];
 
     /**
-     * Sort padrão.
-     *
-     * @var string
+     * @var string Sort padrão
      */
-    public $sort_default = '';
+    public string $sort_default = '';
 
     /**
-     * Filtros.
-     *
-     * @var array
+     * @var array Filtros permitidos
      */
-    public $filters = [];
+    public array $filters = [];
 
     /**
-     * Filtros permitidos.
-     *
-     * @var array
+     * @var int limit de resultados
      */
-    public $filters_allowed = [];
-
-    /**
-     * @var int
-     */
-    public $limitMax = 20;
+    public int $limitMax = 20;
 
     /**
      * @param  $data
@@ -189,7 +177,7 @@ class CRUD
                     }
 
                     if (Str::contains($filter['column'], 'raw:')) {
-                        $filter['column'] = Manager::raw(
+                        $filter['column'] = DB::raw(
                             str_replace('raw:', '', $filter['column']),
                         );
                     }

@@ -19,6 +19,7 @@ class ValidatorStub extends Validator
         // Busca
         'search' => [
             'filters.name' => 'string',
+            'filters.full_name' => 'string',
         ],
     ];
 
