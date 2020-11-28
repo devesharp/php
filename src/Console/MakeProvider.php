@@ -2,6 +2,7 @@
 
 namespace Devesharp\Console;
 
+use Devesharp\Console\Commands\MakePolicy;
 use Devesharp\Console\Commands\MakeRepository;
 use Devesharp\Console\Commands\MakeService;
 use Devesharp\Console\Commands\MakeTransformer;
@@ -24,6 +25,7 @@ class MakeProvider extends ServiceProvider
                 MakeRepository::class,
                 MakeTransformer::class,
                 MakeValidator::class,
+                MakePolicy::class,
             ]);
         }
     }
