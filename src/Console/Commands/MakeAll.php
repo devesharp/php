@@ -12,7 +12,10 @@ class MakeAll extends Command
      *
      * @var string
      */
-    protected $name = 'ds:all';
+    protected $signature = 'ds:all';
+
+
+    protected $description = 'Command description';
 
     /**
      * Get the console command arguments.
@@ -30,10 +33,11 @@ class MakeAll extends Command
     {
         $this->callSilent('ds:validator', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:transformer', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:policy', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:service', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:controller', [ 'name' => $this->argument('name') ]);
 
-        return parent::handle();
+        return 0;
     }
 }
