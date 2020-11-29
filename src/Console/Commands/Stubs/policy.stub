@@ -2,9 +2,7 @@
 
 namespace App\Policies;
 
-use Devesharp\CRUD\Validator;
-
-class Service extends Validator
+class Service
 {
     function create($request) {
         // \Devesharp\CRUD\Exception::Unauthorized();

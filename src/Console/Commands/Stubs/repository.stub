@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Capsule\Manager;
+use Devesharp\CRUD\Repository\RepositoryMysql;
 
 /**
  * Class Service.
@@ -11,7 +11,7 @@ use Illuminate\Database\Capsule\Manager;
  * @method \App\Models\Service findById($id, $enabled = true)
  * @method \App\Models\Service findIdOrFail($id, $enabled = true)
  */
-class Service extends \Devesharp\RepositoryMysql
+class Service extends RepositoryMysql
 {
     /**
      * @var string
