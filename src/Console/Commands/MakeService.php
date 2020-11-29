@@ -27,7 +27,7 @@ class MakeService extends GeneratorCommand
      *
      * @var string
      */
-    protected $type = 'ServiceModel';
+    protected $type = 'Validator';
 
     /**
      * Replace the class name for the given stub.
@@ -72,16 +72,7 @@ class MakeService extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the service.'],
+            ['name', InputArgument::REQUIRED, 'The name of the service'],
         ];
-    }
-
-    public function handle()
-    {
-        $this->callSilent('ds:validator', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('ds:transformer', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
-
-        return parent::handle();
     }
 }
