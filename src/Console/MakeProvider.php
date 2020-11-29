@@ -5,6 +5,7 @@ namespace Devesharp\Console;
 use Devesharp\Console\Commands\MakePolicy;
 use Devesharp\Console\Commands\MakeRepository;
 use Devesharp\Console\Commands\MakeAll;
+use Devesharp\Console\Commands\MakeService;
 use Devesharp\Console\Commands\MakeTransformer;
 use Devesharp\Console\Commands\MakeValidator;
 use UpInside\LaravelMakeTrait\Commands\TraitMakeCommand;
@@ -22,6 +23,7 @@ class MakeProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeAll::class,
+                MakeService::class,
                 MakeRepository::class,
                 MakeTransformer::class,
                 MakeValidator::class,
