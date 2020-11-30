@@ -40,7 +40,7 @@ class MakeRepository extends GeneratorCommand
     {
         $stub = parent::replaceClass($stub, $name);
 
-        return str_replace('Service', $this->argument('name'), $stub);
+        return str_replace('Service', Str::studly($this->argument('name')), $stub);
     }
 
     /**
@@ -80,7 +80,7 @@ class MakeRepository extends GeneratorCommand
     {
         try {
             $this->callSilent('make:model', [
-                'name' => $this->argument('name'),
+                'name' => Str::studly($this->argument('name')),
                 '-m' => true,
                 '-f'=> true
             ]);

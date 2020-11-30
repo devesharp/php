@@ -4,6 +4,7 @@ namespace Devesharp\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 class MakeUnitTestService extends GeneratorCommand
@@ -40,7 +41,7 @@ class MakeUnitTestService extends GeneratorCommand
     {
         $stub = parent::replaceClass($stub, $name);
 
-        return str_replace('ServiceName', $this->argument('name'), $stub);
+        return str_replace('ServiceName', Str::studly($this->argument('name')), $stub);
     }
 
     /**
@@ -61,7 +62,7 @@ class MakeUnitTestService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return  '\Tests\Unit\\' . $this->argument('name');
+        return  '\Tests\Unit\\' . Str::studly($this->argument('name'));
     }
 
     /**

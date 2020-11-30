@@ -1,0 +1,28 @@
+<?php
+
+namespace Tests\Unit\ServiceName;
+
+use App\Models\Users;
+use App\Models\ServiceName;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+class ServiceNameTest extends TestCase
+{
+    /**
+     * @testdox Acessar rota privada
+     */
+    public function testPrivateRoute()
+    {
+        $user = Users::factory()->create();
+        $user->access_token = JWTAuth::fromUser($user);
+
+        $response = $this->get('associados/search', [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        var_dump($response->getContent());
+    }
+}

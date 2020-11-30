@@ -7,28 +7,28 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
-class MakeController extends GeneratorCommand
+class MakeRouteTestService extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'ds:controller';
+    protected $name = 'ds:route-test';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new controller';
+    protected $description = 'Create a new tests for routes';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Validator';
+    protected $type = 'TestRoute';
 
     /**
      * Replace the class name for the given stub.
@@ -51,7 +51,14 @@ class MakeController extends GeneratorCommand
      */
     protected function getStub()
     {
-        return  __DIR__ . '/Stubs/controller.stub';
+        return  __DIR__ . '/Stubs/routes-tests-service.stub';
+    }
+
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'Test.php';
     }
 
     /**
@@ -62,7 +69,7 @@ class MakeController extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\Controllers';
+        return  '\Tests\Routes\\' . Str::studly($this->argument('name'));
     }
 
     /**
@@ -73,7 +80,7 @@ class MakeController extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the controller'],
+            ['name', InputArgument::REQUIRED, 'The name of the routes test'],
         ];
     }
 }

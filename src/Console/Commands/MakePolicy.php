@@ -4,6 +4,7 @@ namespace Devesharp\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 class MakePolicy extends GeneratorCommand
@@ -40,7 +41,7 @@ class MakePolicy extends GeneratorCommand
     {
         $stub = parent::replaceClass($stub, $name);
 
-        return str_replace('Service', $this->argument('name'), $stub);
+        return str_replace('Service', Str::studly($this->argument('name')), $stub);
     }
 
     /**
