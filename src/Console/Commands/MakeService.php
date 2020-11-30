@@ -54,6 +54,12 @@ class MakeService extends GeneratorCommand
         return  __DIR__ . '/Stubs/service.stub';
     }
 
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'Service.php';
+    }
+
     /**
      * Get the default namespace for the class.
      *

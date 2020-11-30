@@ -11,7 +11,7 @@ use Devesharp\CRUD\Repository\RepositoryMysql;
  * @method \App\Models\Service findById($id, $enabled = true)
  * @method \App\Models\Service findIdOrFail($id, $enabled = true)
  */
-class Service extends RepositoryMysql
+class ServiceRepository extends RepositoryMysql
 {
     /**
      * @var string

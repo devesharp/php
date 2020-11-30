@@ -30,13 +30,6 @@ class MakePolicy extends GeneratorCommand
      */
     protected $type = 'class';
 
-    protected function getPath($name)
-    {
-        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-
-        return $this->laravel->basePath().'/tests/'.str_replace('\\', '/', $name).'Test.php';
-    }
-
     /**
      * Replace the class name for the given stub.
      *
@@ -49,6 +42,12 @@ class MakePolicy extends GeneratorCommand
         $stub = parent::replaceClass($stub, $name);
 
         return str_replace('Service', Str::studly($this->argument('name')), $stub);
+    }
+
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'Policy.php';
     }
 
     /**

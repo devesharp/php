@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-class Service
+class ServicePolicy
 {
     function create($request) {
         // \Devesharp\CRUD\Exception::Unauthorized();

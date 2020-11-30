@@ -8,12 +8,12 @@ use Devesharp\CRUD\Transformer;
 use Devesharp\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class ServiceName extends Service
+class ServiceNameService extends Service
 {
-    protected \App\Validators\ServiceName $validator;
-    protected \App\Transformers\ServiceName $transformer;
-    protected \App\Repositories\ServiceName $repository;
-    protected \App\Policies\ServiceName $policy;
+    protected \App\Validators\ServiceNameValidator $validator;
+    protected \App\Transformers\ServiceNameTransformer $transformer;
+    protected \App\Repositories\ServiceNameRepository $repository;
+    protected \App\Policies\ServiceNamePolicy $policy;
 
     public array $sort = [
         'id' => [
@@ -41,10 +41,10 @@ class ServiceName extends Service
     ];
 
     public function __construct(
-        \App\Validators\ServiceName $validator,
-        \App\Transformers\ServiceName $transformer,
-        \App\Repositories\ServiceName $repository,
-        \App\Policies\ServiceName $policy
+        \App\Validators\ServiceNameValidator $validator,
+        \App\Transformers\ServiceNameTransformer $transformer,
+        \App\Repositories\ServiceNameRepository $repository,
+        \App\Policies\ServiceNamePolicy $policy
     ) {
         $this->validator = $validator;
         $this->transformer = $transformer;
@@ -195,11 +195,11 @@ class ServiceName extends Service
     /**
      * @param $data
      * @param null $requester
-     * @return \Devesharp\CRUD\RepositoryInterface|\App\Repositories\ServiceName
+     * @return \Devesharp\CRUD\RepositoryInterface|\App\Repositories\ServiceNameRepository
      */
     protected function makeSearch(&$data, $requester = null)
     {
-        /** @var \App\Repositories\ServiceName $query */
+        /** @var \App\Repositories\ServiceNameRepository $query */
         $query = parent::makeSearch($data, $requester);
 
 //        // Example Query

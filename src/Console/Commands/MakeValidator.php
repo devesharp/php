@@ -44,6 +44,12 @@ class MakeValidator extends GeneratorCommand
         return str_replace('Service', Str::studly($this->argument('name')), $stub);
     }
 
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'Validator.php';
+    }
+
     /**
      * Get the stub file for the generator.
      *

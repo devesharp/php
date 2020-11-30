@@ -6,10 +6,10 @@ class ServiceNameController
 {
     protected $auth;
 
-    protected \App\Services\ServiceName $policy;
+    protected \App\Services\ServiceNameService $service;
 
     public function __construct(
-        \App\Services\ServiceName $service
+        \App\Services\ServiceNameService $service
     ) {
         $this->service = $service;
         $this->auth = function_exists('auth') ? auth() : null;

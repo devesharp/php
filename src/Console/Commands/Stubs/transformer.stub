@@ -4,7 +4,7 @@ namespace App\Transformers;
 
 use Devesharp\CRUD\Transformer;
 
-class Service extends Transformer
+class ServiceTransformer extends Transformer
 {
     public $model = \App\Models\Service::class;
 
