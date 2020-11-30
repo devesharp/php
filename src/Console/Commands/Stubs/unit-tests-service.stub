@@ -11,13 +11,13 @@ use Tests\TestCase;
 class ServiceNameTest extends TestCase
 {
 
-    public \App\Services\ServiceName $service;
+    public \App\Services\ServiceNameService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->service = app('\App\Services\ServiceName');
+        $this->service = app('\App\Services\ServiceNameService');
     }
 
     /**
