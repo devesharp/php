@@ -36,6 +36,8 @@ class MakeAll extends Command
         $this->callSilent('ds:service', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:controller', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:unit-test', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:route-test', [ 'name' => $this->argument('name') ]);
 
         return 0;
     }
