@@ -1,0 +1,100 @@
+<?php
+
+namespace Tests\Unit\ServiceName;
+
+use App\Models\Users;
+use App\Models\ServiceName;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+
+class ServiceNameTest extends TestCase
+{
+
+    public \App\Services\ServiceName $service;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->service = app('\App\Services\ServiceName');
+    }
+
+    /**
+     * @testdox create - default
+     */
+    public function testCreateServiceName()
+    {
+        $userAdmin = Users::factory()->create();
+
+        $resource = $this->service->create([
+            "name" => "John",
+            "age" => "17"
+        ], $userAdmin);
+
+        $this->assertGreaterThan(1, $resource['id']);
+        $this->assertEquals("John", $resource['name']);
+        $this->assertEquals("17", $resource['age']);
+    }
+
+    /**
+     * @testdox update - default
+     */
+    public function testUpdateServiceName()
+    {
+        $userAdmin = Users::factory()->create();
+
+        $resource = $this->service->create([
+            "name" => "John",
+            "age" => "17"
+        ], $userAdmin);
+
+        $body = [
+            "name" => "John",
+            "age" => "18"
+        ];
+
+        $resourceUpdated = $this->service->update($resource['id'], $body, $userAdmin);
+
+        $this->assertEquals($body['name'], $resourceUpdated['name']);
+        $this->assertEquals($body['age'], $resourceUpdated['age']);
+    }
+
+    /**
+     * @testdox search - default
+     */
+    public function testSearchServiceName()
+    {
+        $userAdmin = Users::factory()->create();
+
+        // placa
+        $results = $this->service->search([
+            "filters" => [
+                "id_proposta" => 1
+            ]
+        ], $userAdmin);
+        $this->assertEquals(1, $results['count']);
+
+    }
+
+    /**
+     * @testdox delete - default
+     */
+    public function testDeleteServiceName()
+    {
+        $userAdmin = Users::factory()->create();
+
+        $resource = $this->service->create([
+            "name" => "John",
+            "age" => "17"
+        ], $userAdmin);
+
+        $this->service->delete($resource['id'], $userAdmin);
+
+//        // If softDelete = false
+//        $this->assertNull(ServiceName::query()->find($resource['id']));
+
+        // If softDelete = true
+        $this->assertFalse(ServiceName::query()->find($resource['id'])->enabled);
+    }
+}
