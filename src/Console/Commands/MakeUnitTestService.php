@@ -54,6 +54,13 @@ class MakeUnitTestService extends GeneratorCommand
         return  __DIR__ . '/Stubs/unit-tests-service.stub';
     }
 
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $this->laravel->basePath().'/tests/'.str_replace('\\', '/', $name).'Test.php';
+    }
+
     /**
      * Get the default namespace for the class.
      *
@@ -62,7 +69,7 @@ class MakeUnitTestService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return  '\Tests\Unit\\' . Str::studly($this->argument('name'));
+        return $rootNamespace.'\Unit\\' . Str::studly($this->argument('name'));
     }
 
     /**

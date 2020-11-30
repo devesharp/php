@@ -41,7 +41,18 @@ class MakeRouteTestService extends GeneratorCommand
     {
         $stub = parent::replaceClass($stub, $name);
 
-        return str_replace('ServiceName', Str::studly($this->argument('name')), $stub);
+        $file = str_replace('ServiceName', Str::studly($this->argument('name')), $stub);
+        $file = str_replace('{{route}}', Str::kebab($this->argument('name')), $file);
+
+        return $file;
+    }
+
+
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $this->laravel->basePath().'/tests/'.str_replace('\\', '/', $name).'RouteTest.php';
     }
 
     /**
@@ -54,13 +65,6 @@ class MakeRouteTestService extends GeneratorCommand
         return  __DIR__ . '/Stubs/routes-tests-service.stub';
     }
 
-    protected function getPath($name)
-    {
-        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-
-        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'Test.php';
-    }
-
     /**
      * Get the default namespace for the class.
      *
@@ -69,7 +73,7 @@ class MakeRouteTestService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return  '\Tests\Routes\\' . Str::studly($this->argument('name'));
+        return $rootNamespace.'\Routes\\' . Str::studly($this->argument('name'));
     }
 
     /**

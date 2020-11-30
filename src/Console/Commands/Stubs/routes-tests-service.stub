@@ -1,28 +1,120 @@
 <?php
 
-namespace Tests\Unit\ServiceName;
+namespace Tests\Routes\ServiceName;
 
 use App\Models\Users;
-use App\Models\ServiceName;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ServiceNameTest extends TestCase
 {
     /**
-     * @testdox Acessar rota privada
+     * @testdox [POST]  api/{{route}}
      */
-    public function testPrivateRoute()
+    public function testRouteServiceNameCreate()
     {
         $user = Users::factory()->create();
         $user->access_token = JWTAuth::fromUser($user);
 
-        $response = $this->get('associados/search', [
+        $response = $this->post('{{route}}', [
+            "name" => "John",
+            "age" => "17"
+        ], [
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
 
-        var_dump($response->getContent());
+        $responseData = json_decode($response->getContent(), true);
+
+        $response->assertStatus(200);
+        $this->assertTrue($responseData['success']);
+        $this->assertEquals("John", $responseData['data']['name']);
+        $this->assertEquals("17", $responseData['data']['age']);
+    }
+
+    /**
+     * @testdox [POST]  api/{{route}}/:id
+     */
+    public function testRouteServiceNameUpdate()
+    {
+        $user = Users::factory()->create();
+        $user->access_token = JWTAuth::fromUser($user);
+
+        $resource = ServiceName::factory()->create();
+
+        $response = $this->post('{{route}}/' . $resource->id, [
+            "name" => "New John",
+            "age" => "24"
+        ], [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        $responseData = json_decode($response->getContent(), true);
+
+        $response->assertStatus(200);
+        $this->assertTrue($responseData['success']);
+        $this->assertEquals("New John", $responseData['data']['name']);
+        $this->assertEquals("24", $responseData['data']['age']);
+    }
+
+    /**
+     * @testdox [GET]   api/{{route}}/:id
+     */
+    public function testRouteServiceNameGet()
+    {
+        $user = Users::factory()->create();
+        $user->access_token = JWTAuth::fromUser($user);
+
+        $resource = ServiceName::factory()->create();
+
+        $response = $this->get('{{route}}/' . $resource->id, [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        $responseData = json_decode($response->getContent(), true);
+
+        $response->assertStatus(200);
+        $this->assertTrue($responseData['success']);
+        $this->assertEquals($resource->name, $responseData['data']['name']);
+        $this->assertEquals($resource->age, $responseData['data']['age']);
+    }
+
+    /**
+     * @testdox [POST]  api/{{route}}/search
+     */
+    public function testRouteServiceNameSearch()
+    {
+        $user = Users::factory()->create();
+        $user->access_token = JWTAuth::fromUser($user);
+
+        $response = $this->get('{{route}}/search', [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        $responseData = json_decode($response->getContent(), true);
+
+        $response->assertStatus(200);
+        $this->assertEquals(1, $responseData['data']['count']);
+        $this->assertEquals(1, count($responseData['data']['results']));
+    }
+
+    /**
+     * @testdox [DELETE] api/{{route}}/:id
+     */
+    public function testRouteServiceNameDelete()
+    {
+        $user = Users::factory()->create();
+        $user->access_token = JWTAuth::fromUser($user);
+
+        $resource = ServiceName::factory()->create();
+
+        $response = $this->delete('{{route}}/' . $resource->id, [], [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        $responseData = json_decode($response->getContent(), true);
+
+        $response->assertStatus(200);
+        $this->assertTrue($responseData['success']);
+        $this->assertTrue(!!$responseData['data']);
     }
 }
