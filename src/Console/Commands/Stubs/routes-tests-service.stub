@@ -3,10 +3,11 @@
 namespace Tests\Routes\ServiceName;
 
 use App\Models\Users;
+use App\Models\ServiceName;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class ServiceNameTest extends TestCase
+class ServiceNameRouteTest extends TestCase
 {
     /**
      * @testdox [POST]  api/{{route}}
@@ -15,20 +16,17 @@ class ServiceNameTest extends TestCase
     {
         $user = Users::factory()->create();
         $user->access_token = JWTAuth::fromUser($user);
+        $ServiceNameData = ServiceName::factory()->raw();
 
-        $response = $this->post('{{route}}', [
-            "name" => "John",
-            "age" => "17"
-        ], [
-            'Authorization' => 'Bearer ' . $this->accessToken
+        $response = $this->post('api/{{route}}', $ServiceNameData, [
+            'Authorization' => 'Bearer ' . $user->access_token
         ]);
 
         $responseData = json_decode($response->getContent(), true);
 
         $response->assertStatus(200);
         $this->assertTrue($responseData['success']);
-        $this->assertEquals("John", $responseData['data']['name']);
-        $this->assertEquals("17", $responseData['data']['age']);
+        $this->assertEqualsArrayLeft($ServiceNameData, $responseData['data']);
     }
 
     /**
@@ -38,22 +36,18 @@ class ServiceNameTest extends TestCase
     {
         $user = Users::factory()->create();
         $user->access_token = JWTAuth::fromUser($user);
-
+        $ServiceNameData = ServiceName::factory()->raw();
         $resource = ServiceName::factory()->create();
 
-        $response = $this->post('{{route}}/' . $resource->id, [
-            "name" => "New John",
-            "age" => "24"
-        ], [
-            'Authorization' => 'Bearer ' . $this->accessToken
+        $response = $this->post('api/{{route}}/' . $resource->id, $ServiceNameData, [
+            'Authorization' => 'Bearer ' . $user->access_token
         ]);
 
         $responseData = json_decode($response->getContent(), true);
 
         $response->assertStatus(200);
         $this->assertTrue($responseData['success']);
-        $this->assertEquals("New John", $responseData['data']['name']);
-        $this->assertEquals("24", $responseData['data']['age']);
+        $this->assertEqualsArrayLeft($ServiceNameData, $responseData['data']);
     }
 
     /**
@@ -66,16 +60,15 @@ class ServiceNameTest extends TestCase
 
         $resource = ServiceName::factory()->create();
 
-        $response = $this->get('{{route}}/' . $resource->id, [
-            'Authorization' => 'Bearer ' . $this->accessToken
+        $response = $this->get('api/{{route}}/' . $resource->id, [
+            'Authorization' => 'Bearer ' . $user->access_token
         ]);
 
         $responseData = json_decode($response->getContent(), true);
 
         $response->assertStatus(200);
         $this->assertTrue($responseData['success']);
-        $this->assertEquals($resource->name, $responseData['data']['name']);
-        $this->assertEquals($resource->age, $responseData['data']['age']);
+        $this->assertEqualsArrayLeft($resource->getAttributes(), $responseData['data']);
     }
 
     /**
@@ -85,9 +78,12 @@ class ServiceNameTest extends TestCase
     {
         $user = Users::factory()->create();
         $user->access_token = JWTAuth::fromUser($user);
+        $resource = ServiceName::factory()->create();
 
-        $response = $this->get('{{route}}/search', [
-            'Authorization' => 'Bearer ' . $this->accessToken
+        $response = $this->post('api/{{route}}/search', [
+            'filters' => []
+        ], [
+            'Authorization' => 'Bearer ' . $user->access_token
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -107,8 +103,8 @@ class ServiceNameTest extends TestCase
 
         $resource = ServiceName::factory()->create();
 
-        $response = $this->delete('{{route}}/' . $resource->id, [], [
-            'Authorization' => 'Bearer ' . $this->accessToken
+        $response = $this->delete('api/{{route}}/' . $resource->id, [], [
+            'Authorization' => 'Bearer ' . $user->access_token
         ]);
 
         $responseData = json_decode($response->getContent(), true);

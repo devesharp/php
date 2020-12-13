@@ -26,15 +26,12 @@ class ServiceNameTest extends TestCase
     public function testCreateServiceName()
     {
         $userAdmin = Users::factory()->create();
+        $ServiceNameData = ServiceName::factory()->raw();
 
-        $resource = $this->service->create([
-            "name" => "John",
-            "age" => "17"
-        ], $userAdmin);
+        $resource = $this->service->create($ServiceNameData, $userAdmin);
 
-        $this->assertGreaterThan(1, $resource['id']);
-        $this->assertEquals("John", $resource['name']);
-        $this->assertEquals("17", $resource['age']);
+        $this->assertGreaterThanOrEqual(1, $resource['id']);
+        $this->assertEqualsArrayLeft($ServiceNameData, $resource);
     }
 
     /**
@@ -43,21 +40,15 @@ class ServiceNameTest extends TestCase
     public function testUpdateServiceName()
     {
         $userAdmin = Users::factory()->create();
+        $ServiceNameData = ServiceName::factory()->raw();
 
-        $resource = $this->service->create([
-            "name" => "John",
-            "age" => "17"
-        ], $userAdmin);
+        $resource = $this->service->create($ServiceNameData, $userAdmin);
 
-        $body = [
-            "name" => "John",
-            "age" => "18"
-        ];
+        $ServiceNameDataUpdate = ServiceName::factory()->raw();
 
-        $resourceUpdated = $this->service->update($resource['id'], $body, $userAdmin);
+        $resourceUpdated = $this->service->update($resource['id'], $ServiceNameDataUpdate, $userAdmin);
 
-        $this->assertEquals($body['name'], $resourceUpdated['name']);
-        $this->assertEquals($body['age'], $resourceUpdated['age']);
+        $this->assertEqualsArrayLeft($ServiceNameDataUpdate, $resourceUpdated);
     }
 
     /**
@@ -66,11 +57,11 @@ class ServiceNameTest extends TestCase
     public function testSearchServiceName()
     {
         $userAdmin = Users::factory()->create();
+        ServiceName::factory()->count(5)->create();
 
-        // placa
         $results = $this->service->search([
             "filters" => [
-                "id_proposta" => 1
+                "id" => 1
             ]
         ], $userAdmin);
         $this->assertEquals(1, $results['count']);
@@ -83,11 +74,9 @@ class ServiceNameTest extends TestCase
     public function testDeleteServiceName()
     {
         $userAdmin = Users::factory()->create();
+        $ServiceNameData = ServiceName::factory()->raw();
 
-        $resource = $this->service->create([
-            "name" => "John",
-            "age" => "17"
-        ], $userAdmin);
+        $resource = $this->service->create($ServiceNameData, $userAdmin);
 
         $this->service->delete($resource['id'], $userAdmin);
 
