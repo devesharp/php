@@ -31,7 +31,7 @@ trait TestCase
                 $array[$key] = json_encode($array[$key]);
             }
 
-            $this->assertEquals($item, $array[$key]);
+            $this->assertEquals($item, $array[$key], $key);
         }
     }
 }

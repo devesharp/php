@@ -158,7 +158,7 @@ trait Sortable
         }
 
         $model->refresh();
-        
+
         // Salva posição
         $model->{$this->orderColumnName} = $position;
         $model->update();
