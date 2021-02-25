@@ -52,6 +52,22 @@ class ServiceNameTest extends TestCase
     }
 
     /**
+     * @testdox get - default
+     */
+    public function testGetServiceName()
+    {
+        $userAdmin = Users::factory()->create();
+        $ServiceNameData = ServiceName::factory()->raw();
+
+        $resourceCreated = $this->service->create($ServiceNameData, $userAdmin);
+
+        $resource = $this->service->get($resourceCreated['id'], $userAdmin);
+
+        $this->assertGreaterThanOrEqual(1, $resource['id']);
+        $this->assertEqualsArrayLeft($ServiceNameData, $resource);
+    }
+
+    /**
      * @testdox search - default
      */
     public function testSearchServiceName()
@@ -84,6 +100,6 @@ class ServiceNameTest extends TestCase
 //        $this->assertNull(ServiceName::query()->find($resource['id']));
 
         // If softDelete = true
-        $this->assertFalse(ServiceName::query()->find($resource['id'])->enabled);
+        $this->assertFalse(!!ServiceName::query()->find($resource['id'])->enabled);
     }
 }
