@@ -3,6 +3,7 @@
 namespace Devesharp\Console;
 
 use Devesharp\Console\Commands\MakeController;
+use Devesharp\Console\Commands\MakeModel;
 use Devesharp\Console\Commands\MakePolicy;
 use Devesharp\Console\Commands\MakeRepository;
 use Devesharp\Console\Commands\MakeAll;
@@ -26,6 +27,7 @@ class MakeProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeAll::class,
+                MakeModel::class,
                 MakeService::class,
                 MakeRepository::class,
                 MakeUnitTestService::class,

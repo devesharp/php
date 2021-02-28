@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Devesharp\Support\ModelGetTable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ServiceName extends Model
+{
+    use HasFactory;
+    use ModelGetTable;
+
+    protected $guarded = [];
+}
