@@ -110,6 +110,55 @@ abstract class RepositoryInterface
 
     abstract public function orWhereArrayNotString($column, $value): self;
 
+    abstract public function orWhereNull($column): self;
+
+    abstract public function orWhereNotNull($column): self;
+
+    abstract public function orWhereEqual($column, $value): self;
+
+    abstract public function havingNull($column): self;
+    abstract public function havingNotNull($column): self;
+    abstract public function havingBoolean($column, $value): self;
+    abstract public function havingEqual($column, $value): self;
+    abstract public function havingInt($column, $value): self;
+    abstract public function havingIntGt($column, $value): self;
+    abstract public function havingIntGte($column, $value): self;
+    abstract public function havingIntLt($column, $value): self;
+    abstract public function havingIntLte($column, $value): self;
+    abstract public function havingNotInt($column, $value): self;
+    abstract public function havingSameString($column, $value): self;
+    abstract public function havingLike($column, $value): self;
+    abstract public function havingNotLike($column, $value): self;
+    abstract public function havingBeginWithLike($column, $value): self;
+    abstract public function havingEndWithLike($column, $value): self;
+    abstract public function havingContainsLike($column, $value): self;
+    abstract public function havingContainsExplodeString($column, $value): self;
+    abstract public function havingArrayInt($column, $value): self;
+    abstract public function havingArrayNotInt($column, $value): self;
+    abstract public function havingArrayString($column, $value): self;
+    abstract public function havingArrayNotString($column, $value): self;
+    abstract public function orHavingBoolean($column, $value): self;
+    abstract public function orHavingInt($column, $value): self;
+    abstract public function orHavingNotInt($column, $value): self;
+    abstract public function orHavingIntGt($column, $value): self;
+    abstract public function orHavingIntGte($column, $value): self;
+    abstract public function orHavingIntLt($column, $value): self;
+    abstract public function orHavingIntLte($column, $value): self;
+    abstract public function orHavingSameString($column, $value): self;
+    abstract public function orHavingLike($column, $value): self;
+    abstract public function orHavingNotLike($column, $value): self;
+    abstract public function orHavingBeginWithLike($column, $value): self;
+    abstract public function orHavingEndWithLike($column, $value): self;
+    abstract public function orHavingContainsLike($column, $value): self;
+    abstract public function orHavingContainsExplodeString($column, $value): self;
+    abstract public function orHavingArrayInt($column, $value): self;
+    abstract public function orHavingArrayNotInt($column, $value): self;
+    abstract public function orHavingArrayString($column, $value): self;
+    abstract public function orHavingArrayNotString($column, $value): self;
+    abstract public function orHavingNull($column): self;
+    abstract public function orHavingNotNull($column): self;
+    abstract public function orHavingEqual($column, $value): self;
+
     abstract public function orWhere($callback): self;
 
     abstract public function andWhere($callback): self;

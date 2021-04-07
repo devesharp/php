@@ -605,6 +605,27 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
+    public function orWhereNull($column): self
+    {
+        $this->modelQuery = $this->modelQuery->orWhereNull($column);
+
+        return $this;
+    }
+
+    public function orWhereNotNull($column): self
+    {
+        $this->modelQuery = $this->modelQuery->orWhereNotNull($column);
+
+        return $this;
+    }
+
+    public function orWhereEqual($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->orWhere($column, $value);
+
+        return $this;
+    }
+
     public function orWhere($callback): self
     {
         $that = $this;
@@ -654,6 +675,35 @@ class RepositoryMysql extends RepositoryInterface
         return $this;
     }
 
+    public function havingEqual($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->having($column, $value);
+
+        return $this;
+    }
+
+    public function havingIntLte($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->having(
+            $column,
+            '<=',
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function havingNotInt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->having(
+            $column,
+            '!=',
+            intval($value),
+        );
+
+        return $this;
+    }
+
     public function havingInt($column, $value): self
     {
         $this->modelQuery = $this->modelQuery->having($column, intval($value));
@@ -688,17 +738,6 @@ class RepositoryMysql extends RepositoryInterface
         $this->modelQuery = $this->modelQuery->having(
             $column,
             '<',
-            intval($value),
-        );
-
-        return $this;
-    }
-
-    public function havingIntLte($column, $value): self
-    {
-        $this->modelQuery = $this->modelQuery->having(
-            $column,
-            '<=',
             intval($value),
         );
 
@@ -837,6 +876,17 @@ class RepositoryMysql extends RepositoryInterface
     {
         $this->modelQuery = $this->modelQuery->orHaving(
             $column,
+            intval($value),
+        );
+
+        return $this;
+    }
+
+    public function orHavingNotInt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->orHaving(
+            $column,
+            '!=',
             intval($value),
         );
 
@@ -1014,6 +1064,32 @@ class RepositoryMysql extends RepositoryInterface
 
         return $this;
     }
+
+    public function orHavingNull($column): self
+    {
+        $query = '"' . $column . '" IS NULL';
+
+        $this->modelQuery = $this->modelQuery->orHavingRaw($query);
+
+        return $this;
+    }
+
+    public function orHavingNotNull($column): self
+    {
+        $query = '"' . $column . '" IS NOT NULL';
+
+        $this->modelQuery = $this->modelQuery->orHavingRaw($query);
+
+        return $this;
+    }
+
+    public function orHavingEqual($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->having($column, $value);
+
+        return $this;
+    }
+
 
     public function orderBy($column, $order): self
     {
