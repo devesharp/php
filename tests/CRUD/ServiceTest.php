@@ -2,12 +2,8 @@
 
 namespace Tests\CRUD;
 
-use Devesharp\CRUD\Repository\RepositoryMysql;
-use Devesharp\Support\Collection;
 use Devesharp\Support\Helpers;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Tests\CRUD\Mocks\ModelRepositoryStub;
 use Tests\CRUD\Mocks\ModelStub;
 use Tests\CRUD\Mocks\ServiceStub;
 use Tests\TestCase;
@@ -133,5 +129,163 @@ class ServiceTest extends TestCase
         $this->assertEquals(true, $result);
 
         $this->assertEquals(null, ModelStub::query()->first());
+    }
+
+    /**
+     * @testdox filterSearch - default with empty
+     */
+    public function testFilterSearch()
+    {
+        $model = $this->service->filterSearch([], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - sort asc
+     */
+    public function testFilterSearchSortAsc()
+    {
+        // defining sorts allowed
+        $this->service->sort = [
+            'name' => [
+                'column' => 'name',
+            ],
+        ];
+
+        $model = $this->service->filterSearch([
+            'query' => [
+                'sort' => 'name'
+            ]
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "name" asc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - sort desc
+     */
+    public function testFilterSearchSortDesc()
+    {
+        // defining sorts allowed
+        $this->service->sort = [
+            'name' => [
+                'column' => 'name',
+            ],
+        ];
+        $model = $this->service->filterSearch([
+            'query' => [
+                'sort' => '-name'
+            ]
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "name" desc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - many sort
+     */
+    public function testFilterSearchManySort()
+    {
+        // defining sorts allowed
+        $this->service->sort = [
+            'id' => [
+                'column' => 'id',
+            ],
+            'name' => [
+                'column' => 'name',
+            ],
+            'age' => [
+                'column' => 'age',
+            ],
+        ];
+
+        $model = $this->service->filterSearch([
+            'query' => [
+                'sort' => 'name,-id,-age'
+            ]
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "name" asc, "id" desc, "age" desc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - limit
+     */
+    public function testFilterSearchLimit()
+    {
+        // defining sorts allowed
+        $this->service->limitMax = 40;
+
+        $model = $this->service->filterSearch([
+            'query' => [
+                'limit' => 30
+            ],
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 30', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - page
+     */
+    public function testFilterSearchPage()
+    {
+        // defining sorts allowed
+        $this->service->limitMax = 40;
+
+        $model = $this->service->filterSearch([
+            'query' => [
+                'page' => 2
+            ],
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        // page * limit
+        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 20 offset 40', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - offset
+     */
+    public function testFilterSearchOffset()
+    {
+        // defining sorts allowed
+        $this->service->limitMax = 40;
+
+        $model = $this->service->filterSearch([
+            'query' => [
+                'offset' => 30
+            ],
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 20 offset 30', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - filters
+     */
+    public function testFilterSearchFilters()
+    {
+        $model = $this->service->filterSearch([
+            'filters' => [
+                'id' => 30
+            ],
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" where "id" = ? order by "id" asc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox filterSearch - filters with raw
+     */
+    public function testFilterSearchFiltersRaw()
+    {
+        $model = $this->service->filterSearch([
+            'filters' => [
+                'full_name' => 'sdsd'
+            ],
+        ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
+
+        $this->assertEquals('select * from "model_stubs" where (name || \' \' || age) LIKE ? order by "id" asc limit 20', $model->getBuilder()->toSql());
     }
 }

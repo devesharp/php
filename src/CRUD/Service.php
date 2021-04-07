@@ -113,6 +113,10 @@ class Service
             --$page;
 
             $repository->offset($page * $limit);
+        }else if (isset($body['query']['offset'])) {
+            $offset = intval($body['query']['offset']);
+
+            $repository->offset($offset);
         }
 
         /*
