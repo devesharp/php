@@ -288,4 +288,37 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('select * from "model_stubs" where (name || \' \' || age) LIKE ? order by "id" asc limit 20', $model->getBuilder()->toSql());
     }
+
+    /**
+     * @testdox makeSelect - with number
+     */
+    public function testMakeSelectInt()
+    {
+        $model = $this->service->makeSelect(1);
+
+        $this->assertEquals('select * from "model_stubs" where "model_stubs"."id" = ? order by "id" asc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox makeSelect - with array numbers
+     */
+    public function testMakeSelectArray()
+    {
+        $model = $this->service->makeSelect([1,2,3]);
+
+        $this->assertEquals('select * from "model_stubs" where "model_stubs"."id" in (?, ?, ?) order by "id" asc limit 20', $model->getBuilder()->toSql());
+    }
+
+    /**
+     * @testdox makeSelect - with makeSearch
+     */
+    public function testMakeSelectFilter()
+    {
+        $model = $this->service->makeSelect([
+            'id' => 30,
+            'full_name' => 'sdsd'
+        ]);
+
+        $this->assertEquals('select * from "model_stubs" where "id" = ? and (name || \' \' || age) LIKE ? order by "id" asc limit 20', $model->getBuilder()->toSql());
+    }
 }
