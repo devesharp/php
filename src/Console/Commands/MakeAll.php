@@ -30,15 +30,15 @@ class MakeAll extends Command
 
     public function handle()
     {
+        $this->callSilent('ds:service', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:validator', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:transformer', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:policy', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('ds:service', [ 'name' => $this->argument('name') ]);
-        $this->callSilent('ds:repository', [ 'name' => $this->argument('name') ]);
+        $this->callSilent('ds:repository', [ 'name' => $this->argument('name'), '--all' => true ]);
         $this->callSilent('ds:controller', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:unit-test', [ 'name' => $this->argument('name') ]);
         $this->callSilent('ds:route-test', [ 'name' => $this->argument('name') ]);
-
+        
         return 0;
     }
 }

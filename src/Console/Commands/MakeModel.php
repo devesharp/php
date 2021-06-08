@@ -117,10 +117,6 @@ class MakeModel extends GeneratorCommand
     {
         $table = Str::snake(Str::pluralStudly(class_basename($this->argument('name'))));
 
-        if ($this->option('pivot')) {
-            $table = Str::singular($table);
-        }
-
         $this->call('make:migration', [
             'name' => "create_{$table}_table",
             '--create' => $table,
