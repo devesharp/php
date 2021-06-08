@@ -6,6 +6,7 @@ use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class MakeModel extends GeneratorCommand
 {
@@ -81,6 +82,7 @@ class MakeModel extends GeneratorCommand
 //        CreateFlightsTable
         return [
             ['name', InputArgument::REQUIRED, 'The name of the model'],
+            ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model'],
         ];
     }
 
