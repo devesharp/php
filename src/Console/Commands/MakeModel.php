@@ -78,8 +78,44 @@ class MakeModel extends GeneratorCommand
      */
     protected function getArguments()
     {
+//        CreateFlightsTable
         return [
             ['name', InputArgument::REQUIRED, 'The name of the model'],
         ];
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        if (parent::handle() === false && ! $this->option('force')) {
+            return false;
+        }
+
+        if ($this->option('migration')) {
+            $this->createMigration();
+        }
+    }
+
+    /**
+     * Create a migration file for the model.
+     *
+     * @return void
+     */
+    protected function createMigration()
+    {
+        $table = Str::snake(Str::pluralStudly(class_basename($this->argument('name'))));
+
+        if ($this->option('pivot')) {
+            $table = Str::singular($table);
+        }
+
+        $this->call('make:migration', [
+            'name' => "create_{$table}_table",
+            '--create' => $table,
+        ]);
     }
 }
