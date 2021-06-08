@@ -81,7 +81,13 @@ class MakeModel extends GeneratorCommand
     {
 //        CreateFlightsTable
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the model'],
+            ['name', InputArgument::REQUIRED, 'The name of the model']
+        ];
+    }
+
+    protected function getOptions()
+    {
+        return [
             ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model'],
         ];
     }
