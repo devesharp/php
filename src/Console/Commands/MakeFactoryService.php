@@ -72,7 +72,7 @@ class MakeFactoryService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Factories\\' . Str::studly($this->argument('name'));
+        return $rootNamespace.'\Factories';
     }
 
     /**
