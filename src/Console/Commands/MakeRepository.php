@@ -93,7 +93,9 @@ class MakeRepository extends GeneratorCommand
                     '--migration' => $this->option('migration') || $this->option('all')
                 ]);
             }
+        } catch (\Exception $e) {}
 
+        try {
             if ($this->option('factory') || $this->option('all')) {
                 $this->callSilent('ds:factory', [
                     'name' => Str::studly($this->argument('name'))

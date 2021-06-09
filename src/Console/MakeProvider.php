@@ -3,6 +3,7 @@
 namespace Devesharp\Console;
 
 use Devesharp\Console\Commands\MakeController;
+use Devesharp\Console\Commands\MakeFactoryService;
 use Devesharp\Console\Commands\MakeModel;
 use Devesharp\Console\Commands\MakePolicy;
 use Devesharp\Console\Commands\MakeRepository;
@@ -34,6 +35,7 @@ class MakeProvider extends ServiceProvider
                 MakeRouteTestService::class,
                 MakeTransformer::class,
                 MakeValidator::class,
+                MakeFactoryService::class,
                 MakeController::class,
                 MakePolicy::class,
             ]);
