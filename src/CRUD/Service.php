@@ -243,7 +243,7 @@ class Service
      * @throws Exception
      * @return RepositoryInterface
      */
-    public function makeSelect($target, $auth = null)
+    public function makeSelectActions($target, $auth = null)
     {
         if (empty($target)) {
             throw new Exception('Resource not found', Exception::NOT_FOUND_RESOURCE);
@@ -273,7 +273,7 @@ class Service
                 $query->whereArrayInt('id', $target);
             }
         } elseif (is_object($target) || Helpers::isArrayAssoc($target)) {
-            $target = ['filters' => $target];
+            $target = Collection::make(['filters' => $target]);
 
             $query = $this->makeSearch($target, $auth);
         } else {
