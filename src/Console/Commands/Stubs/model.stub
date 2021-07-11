@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
+use App\Presenters\ServicePresenter;
+use Devesharp\CRUD\Presenter\PresentableTrait;
 use Devesharp\Support\ModelGetTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ServiceName extends Model
 {
-    use HasFactory;
-    use ModelGetTable;
+    use HasFactory, ModelGetTable, PresentableTrait;
+
+    protected $presenter = ServicePresenter::class;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'enabled' => 'bool'
+    ];
 }
