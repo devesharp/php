@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Devesharp\CRUD\Repository\RepositoryMysql;
+use Devesharp\CRUD\Repository\DataInterface;
 
 /**
  * Class Service.
@@ -11,7 +11,7 @@ use Devesharp\CRUD\Repository\RepositoryMysql;
  * @method \App\Models\Service findById($id, $enabled = true)
  * @method \App\Models\Service findIdOrFail($id, $enabled = true)
  */
-class ServiceRepository extends RepositoryMysql
+class ServiceRepository extends DataInterface
 {
     /**
      * @var string
