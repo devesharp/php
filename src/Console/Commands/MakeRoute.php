@@ -15,7 +15,7 @@ class MakeRoute extends Command
      *
      * @var string
      */
-    protected $name = 'ds:route';
+    protected $name = 'ds:routecrud';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class MakeRoute extends Command
      *
      * @var string
      */
-    protected $type = 'Routes';
+    protected $type = 'RoutesCrud';
 
     private $files;
 
