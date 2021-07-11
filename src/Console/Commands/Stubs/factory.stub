@@ -23,6 +23,8 @@ class ServiceNameFactory extends Factory
      */
     public function definition()
     {
-        return [];
+        return [
+            'name' => 'john'
+        ];
     }
 }
