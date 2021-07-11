@@ -8,6 +8,7 @@ use Devesharp\Console\Commands\MakeModel;
 use Devesharp\Console\Commands\MakePolicy;
 use Devesharp\Console\Commands\MakeRepository;
 use Devesharp\Console\Commands\MakeAll;
+use Devesharp\Console\Commands\MakeRoute;
 use Devesharp\Console\Commands\MakeRouteTestService;
 use Devesharp\Console\Commands\MakeService;
 use Devesharp\Console\Commands\MakeTransformer;
@@ -29,6 +30,7 @@ class MakeProvider extends ServiceProvider
             $this->commands([
                 MakeAll::class,
                 MakeModel::class,
+                MakeRoute::class,
                 MakeService::class,
                 MakeRepository::class,
                 MakeUnitTestService::class,
