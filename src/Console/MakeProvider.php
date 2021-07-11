@@ -6,6 +6,7 @@ use Devesharp\Console\Commands\MakeController;
 use Devesharp\Console\Commands\MakeFactoryService;
 use Devesharp\Console\Commands\MakeModel;
 use Devesharp\Console\Commands\MakePolicy;
+use Devesharp\Console\Commands\MakePresenter;
 use Devesharp\Console\Commands\MakeRepository;
 use Devesharp\Console\Commands\MakeAll;
 use Devesharp\Console\Commands\MakeRoute;
@@ -31,6 +32,7 @@ class MakeProvider extends ServiceProvider
                 MakeAll::class,
                 MakeModel::class,
                 MakeRoute::class,
+                MakePresenter::class,
                 MakeService::class,
                 MakeRepository::class,
                 MakeUnitTestService::class,
