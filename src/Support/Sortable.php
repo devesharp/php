@@ -2,6 +2,8 @@
 
 namespace Devesharp\Support;
 
+use Illuminate\Support\Str;
+
 /**
  * Trait Sortable.
  */
@@ -145,7 +147,7 @@ trait Sortable
                 $query
                     ->where(
                         $this->orderColumnName,
-                        '>=',
+                        '>',
                         $model->{$this->orderColumnName},
                     )
                     ->where($this->orderColumnName, '<=', $position)
