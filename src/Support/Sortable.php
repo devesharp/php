@@ -111,6 +111,9 @@ trait Sortable
             ->where($this->orderColumnNameForeignKey, $this->id)
             ->first();
 
+        if (empty($model))
+            return $this;
+
         /*
          * Não pode ser menor que zero
          */
