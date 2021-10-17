@@ -97,6 +97,84 @@ class RepositoryTest extends TestCase
     }
 
     /**
+     * @testdox Mysql - Filter Number
+     */
+    public function testMysqlFilterWhereNumber()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNumber('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" = ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - Filter NumberGt
+     */
+    public function testMysqlFilterWhereNumberGt()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNumberGt('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" > ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - Filter NumberLt
+     */
+    public function testMysqlFilterWhereNumberLt()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNumberLt('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" < ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - Filter NumberGte
+     */
+    public function testMysqlFilterWhereNumberGte()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNumberGte('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" >= ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - Filter NumberLte
+     */
+    public function testMysqlFilterWhereNumberLte()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNumberLte('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" <= ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - Filter whereNotInt
+     */
+    public function testMysqlFilterWhereNotNumber()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereNotNumber('id', 0);
+        $this->assertStringContainsString(
+            ' where "id" != ?',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
      * @testdox Mysql - Filter SameString
      */
     public function testMysqlFilterWhereSameString()
@@ -571,6 +649,20 @@ class RepositoryTest extends TestCase
 
         $this->assertStringContainsString(
             ' and ("id" = ? and "id" = ? and "id" = ? and ("id" = ? and "id" = ?))',
+            $repository->getModel()->toSql(),
+        );
+    }
+
+    /**
+     * @testdox Mysql - whereRaw
+     */
+    public function testMysqlFilterAndWhereRaw()
+    {
+        $repository = new RepositoryStub();
+        $repository->whereRaw(DB::raw("column != colum2"));
+
+        $this->assertStringContainsString(
+            'column != colum2',
             $repository->getModel()->toSql(),
         );
     }

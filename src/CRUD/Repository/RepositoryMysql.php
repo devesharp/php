@@ -207,7 +207,7 @@ class RepositoryMysql extends RepositoryInterface
 
     public function whereRaw($column)
     {
-        $this->modelQuery = $this->modelQuery->whereYear($column);
+        $this->modelQuery = $this->modelQuery->whereRaw($column);
 
         return $this;
     }
@@ -332,6 +332,68 @@ class RepositoryMysql extends RepositoryInterface
             $column,
             '!=',
             intval($value),
+        );
+
+        return $this;
+    }
+
+    public function whereNumber($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where($column, $value);
+
+        return $this;
+    }
+
+    public function whereNumberGt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '>',
+            $value,
+        );
+
+        return $this;
+    }
+
+    public function whereNumberGte($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '>=',
+            $value,
+        );
+
+        return $this;
+    }
+
+    public function whereNumberLt($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '<',
+            $value,
+        );
+
+        return $this;
+    }
+
+    public function whereNumberLte($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '<=',
+            $value,
+        );
+
+        return $this;
+    }
+
+    public function whereNotNumber($column, $value): self
+    {
+        $this->modelQuery = $this->modelQuery->where(
+            $column,
+            '!=',
+            $value,
         );
 
         return $this;
