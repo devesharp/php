@@ -36,6 +36,11 @@ class Service
      */
     public int $limitMax = 20;
 
+    /**
+     * @var int limit padrão
+     */
+    public int $limitDefault = 20;
+
     // Variável interna para resgatar apenas dados
     private bool $__getOnlyResults__ = false;
 
@@ -114,22 +119,19 @@ class Service
      */
     public function filterSearch($body, $repository)
     {
-        $limit = $this->limitMax;
+        $limit = $this->limitDefault;
 
         /*
          * Limit
          */
         if (isset($body['query']['limit'])) {
             $limit = intval($body['query']['limit']);
-
             if ($limit > $this->limitMax) {
-                $repository->limit($this->limitMax);
-            } else {
-                $repository->limit($limit);
+                $limit = $this->limitMax;
             }
-        } else {
-            $repository->limit(20);
         }
+
+        $repository->limit($limit);
 
         /*
          * Paginacão
