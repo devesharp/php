@@ -22,7 +22,15 @@ class RepositoryFooStub extends RepositoryMysql
             (object) [
                 'id' => 1,
                 'login' => 'john.' . RepositoryFooStub::$id++
-            ]
+            ],
+            (object) [
+                'id' => 2,
+                'login' => 'john.' . RepositoryFooStub::$id++
+            ],
+            (object) [
+                'id' => 3,
+                'login' => 'john.' . RepositoryFooStub::$id++
+            ],
         ];
     }
 }

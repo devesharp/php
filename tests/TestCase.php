@@ -24,6 +24,7 @@ abstract class TestCase extends Orchestra
             $table->bigIncrements('id');
             $table->string('name');
             $table->integer('age');
+            $table->integer('user_create')->default(0);
             $table->timestampsTz();
         });
 

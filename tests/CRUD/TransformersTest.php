@@ -97,4 +97,38 @@ class TransformersTest extends \Tests\TestCase
          */
         $this->assertEquals('john.0', $this->transformer->getFoo(1)->login);
     }
+
+    /**
+     * @testdox Transformer - testar repository cache com load automático
+     */
+    public function testTransformerRepositoryCacheAutomatic()
+    {
+        \Tests\CRUD\Mocks\RepositoryFooStub::$id = 0;
+
+        $transformer = new \Tests\CRUD\Mocks\TransformerWithLoadCacheStub();
+
+        $model = ModelStub::query()->create([
+            'name' => 's',
+            'user_create' => 1,
+            'age' => 17,
+        ]);
+        $model2 = ModelStub::query()->create([
+            'name' => 'john',
+            'user_create' => 2,
+            'age' => 20,
+        ]);
+        $model3 = ModelStub::query()->create([
+            'name' => 'veronica',
+            'user_create' => 3,
+            'age' => 48,
+        ]);
+
+        Transformer::collection(ModelStub::query()->get()->all(), $transformer);
+
+        $this->assertEquals(\Illuminate\Support\Arr::pluck(Transformer::collection(ModelStub::query()->get()->all(), $transformer), 'user_create'), [
+            'john.0',
+            'john.1',
+            'john.2',
+        ]);
+    }
 }
