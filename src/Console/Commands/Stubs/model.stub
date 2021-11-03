@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Presenters\ServicePresenter;
+use App\Presenters\ServiceNamePresenter;
 use Devesharp\CRUD\Presenter\PresentableTrait;
 use Devesharp\Support\ModelGetTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

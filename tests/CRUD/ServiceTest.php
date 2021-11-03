@@ -32,6 +32,7 @@ class ServiceTest extends TestCase
         $this->assertEquals(Helpers::arrayExclude($model, ['created_at', 'updated_at']), [
             'id' => 1,
             'name' => 'John',
+            'user_create' => 0,
             'age' => 10
         ]);
     }
@@ -56,6 +57,7 @@ class ServiceTest extends TestCase
         $this->assertEquals(Helpers::arrayExclude($model, ['created_at', 'updated_at']), [
             'id' => 1,
             'name' => 'John Wick',
+            'user_create' => 0,
             'age' => 11
         ]);
     }
@@ -233,6 +235,7 @@ class ServiceTest extends TestCase
     {
         // defining sorts allowed
         $this->service->limitMax = 40;
+        $this->service->limitDefault = 40;
 
         $model = $this->service->filterSearch([
             'query' => [
@@ -241,7 +244,7 @@ class ServiceTest extends TestCase
         ], app(\Tests\CRUD\Mocks\RepositoryStub::class));
 
         // page * limit
-        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 20 offset 40', $model->getBuilder()->toSql());
+        $this->assertEquals('select * from "model_stubs" order by "id" asc limit 40 offset 40', $model->getBuilder()->toSql());
     }
 
     /**
@@ -290,31 +293,31 @@ class ServiceTest extends TestCase
     }
 
     /**
-     * @testdox makeSelect - with number
+     * @testdox makeSelectActions - with number
      */
     public function testMakeSelectInt()
     {
-        $model = $this->service->makeSelect(1);
+        $model = $this->service->makeSelectActions(1);
 
         $this->assertEquals('select * from "model_stubs" where "model_stubs"."id" = ? order by "id" asc limit 20', $model->getBuilder()->toSql());
     }
 
     /**
-     * @testdox makeSelect - with array numbers
+     * @testdox makeSelectActions - with array numbers
      */
     public function testMakeSelectArray()
     {
-        $model = $this->service->makeSelect([1,2,3]);
+        $model = $this->service->makeSelectActions([1,2,3]);
 
         $this->assertEquals('select * from "model_stubs" where "model_stubs"."id" in (?, ?, ?) order by "id" asc limit 20', $model->getBuilder()->toSql());
     }
 
     /**
-     * @testdox makeSelect - with makeSearch
+     * @testdox makeSelectActions - with makeSearch
      */
     public function testMakeSelectFilter()
     {
-        $model = $this->service->makeSelect([
+        $model = $this->service->makeSelectActions([
             'id' => 30,
             'full_name' => 'sdsd'
         ]);

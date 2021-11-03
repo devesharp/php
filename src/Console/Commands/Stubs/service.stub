@@ -51,7 +51,7 @@ class ServiceNameService extends Service
      * @return mixed
      * @throws \Exception
      */
-    public function create(array $originalData, $requester = null)
+    public function create(array $originalData, $requester = null, $context = 'model')
     {
         try {
             DB::beginTransaction();
@@ -70,7 +70,7 @@ class ServiceNameService extends Service
 
             DB::commit();
 
-            return $this->get($model->id, $requester);
+            return $this->get($model->id, $requester, $context);
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -87,7 +87,8 @@ class ServiceNameService extends Service
     public function update(
         int $id,
         array $originalData,
-        $requester = null
+        $requester = null,
+        $context = 'model'
     ) {
         try {
             DB::beginTransaction();
@@ -108,7 +109,7 @@ class ServiceNameService extends Service
 
             DB::commit();
 
-            return $this->get($id, $requester);
+            return $this->get($id, $requester, $context);
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -144,17 +145,24 @@ class ServiceNameService extends Service
      * @return mixed
      * @throws \Devesharp\CRUD\Exception
      */
-    public function get(int $id, $receiver)
+    public function get(int $id, $receiver, string $context = 'default')
     {
         // Get model
-        $model = $this->repository->findIdOrFail($id);
+        $model = $this->makeSearch($data, $receiver)
+            ->whereInt('id', $id)
+            ->findOne();
 
-        $this->policy->get($receiver, $model);
+        if (empty($model)) {
+            \Devesharp\CRUD\Exception::NotFound(\App\Models\ServiceName::class);
+        }
+
+        if ($context != 'model')
+            $this->policy->get($receiver, $model);
 
         return Transformer::item(
             $model,
             $this->transformer,
-            'default',
+            $context,
             $receiver,
         );
     }

@@ -61,6 +61,7 @@ class TransformersTest extends \Tests\TestCase
                 [
                     'name' => 's',
                     'age' => 17,
+                    'user_create' => 0,
                     'updated_at' => (string) $model->updated_at,
                     'created_at' => (string) $model->created_at,
                     'id' => 1,
@@ -68,6 +69,7 @@ class TransformersTest extends \Tests\TestCase
                 [
                     'name' => 'john',
                     'age' => 20,
+                    'user_create' => 0,
                     'updated_at' => (string) $model2->updated_at,
                     'created_at' => (string) $model2->created_at,
                     'id' => 2,
@@ -75,6 +77,7 @@ class TransformersTest extends \Tests\TestCase
                 [
                     'name' => 'veronica',
                     'age' => 48,
+                    'user_create' => 0,
                     'updated_at' => (string) $model3->updated_at,
                     'created_at' => (string) $model3->created_at,
                     'id' => 3,

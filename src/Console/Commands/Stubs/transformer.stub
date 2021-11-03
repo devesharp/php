@@ -24,6 +24,9 @@ class ServiceTransformer extends Transformer
             throw new \Exception('invalid model transform');
         }
 
+        if ($context === 'model')
+            return $model;
+
 //        // Cache Repository
 //        $this->loadFoo([1]);
 //        $foo = $this->transformer->getFoo(1);

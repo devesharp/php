@@ -36,17 +36,40 @@ class Transformer
     ) {
         $transformed = [];
 
-        if (Helpers::isArrayAssoc($models)) {
-            foreach ($models as $key => $model) {
-                $loads = [];
-                foreach ($this->loads as $loadName => $load) {
-                    $foreignKey = $model[2] ?? $loadName . '_id';
+        /**
+         * Fazer o pre carregamento de todos os itens que irão ser chamados
+         */
 
-                    $load[$loadName][] = $model->{$foreignKey};
-                }
-                var_dump($load);
+        // Resgatar Ids dos loads
+        $loads = [];
+        foreach ($models as $model) {
+            foreach ($this->loads as $loadName => $load) {
+                if (class_exists($model[0]))
+                    throw new \Exception('Class ' . $model[0] . ' not found for transformer');
+
+                $foreignKey = $load[1] ?? $loadName . '_id';
+
+                // add id for array
+                $loads[$loadName][] = $model->{$foreignKey};
             }
+        }
 
+        // Fazer load
+        foreach ($this->loads as $loadName => $load) {
+            $name = \Illuminate\Support\Str::ucfirst(\Illuminate\Support\Str::camel($loadName));
+            // Se classe não estiver definida, faz um load padrão com valores
+            if (!method_exists($this, 'load' . $name)) {
+                $foreignKey = $load[0];
+                $this->loadResource($loadName, app($foreignKey), $loads[$loadName]);
+            } else {
+                $this->{'load' . $name}($loads[$loadName]);
+            }
+        }
+
+        /**
+         * Realizar transformer
+         */
+        if (Helpers::isArrayAssoc($models)) {
             foreach ($models as $key => $model) {
                 $transformed[$key] = $this->transform(
                     $model,
@@ -55,39 +78,6 @@ class Transformer
                 );
             }
         } else {
-
-            /**
-             * Fazer o pre carregamento de todos os itens que irão ser chamados
-             */
-            // Resgatar Ids dos loads
-            $loads = [];
-            foreach ($models as $model) {
-                foreach ($this->loads as $loadName => $load) {
-                    if (class_exists($model[0]))
-                        throw new \Exception('Class ' . $model[0] . ' not found for transformer');
-
-                    $foreignKey = $load[1] ?? $loadName . '_id';
-
-                    // add id for array
-                    $loads[$loadName][] = $model->{$foreignKey};
-                }
-            }
-
-            // Fazer load
-            foreach ($this->loads as $loadName => $load) {
-                $name = \Illuminate\Support\Str::ucfirst(\Illuminate\Support\Str::camel($loadName));
-                // Se classe não estiver definida, faz um load padrão com valores
-                if (!method_exists($this, 'load' . $name)) {
-                    $foreignKey = $load[0];
-                    $this->loadResource($loadName, app($foreignKey), $loads[$loadName]);
-                } else {
-                    $this->{'load' . $name}($loads[$loadName]);
-                }
-            }
-
-            /**
-             * Realizar transformer
-             */
             foreach ($models as $model) {
                 $transformed[] = $this->transform($model, $context, $requester);
             }
