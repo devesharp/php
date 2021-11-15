@@ -126,7 +126,7 @@ class ServiceNameRouteTest extends TestCase
                 'Authorization' => 'Bearer ' . $user->access_token
             ],
             'validatorClass' => \App\Validators\ServiceNameValidator::class,
-            'validatorMethod' => 'update'
+            'validatorMethod' => 'search'
         ]);
 
         $responseData = json_decode($response->getContent(), true);
