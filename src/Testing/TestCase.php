@@ -152,7 +152,7 @@ trait TestCase
             $uriForTest = $uriForTest . '?' . implode('&', $query);
         }
 
-        if ($uriForTest[0] != '/') {
+        if ($uriForTest[0] != "/") {
             $uriForTest = '/' . $uriForTest;
         }
 
