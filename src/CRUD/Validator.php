@@ -217,8 +217,13 @@ class Validator
     }
 
     public function convertValidatorToData(string $validatorName, $data = []) {
-
         $data = $this->validate($data, $this->getValidate($validatorName))->toArray();
+
+        if ($validatorName === 'search') {
+            \Illuminate\Support\Arr::set($data, 'query.offset', 0);
+            \Illuminate\Support\Arr::set($data, 'query.limit', 20);
+            \Illuminate\Support\Arr::set($data, 'query.sort', '');
+        }
 
         foreach ($this->rules[$validatorName] as $key => $value) {
             $key = str_replace('*', '0', $key);
@@ -234,6 +239,19 @@ class Validator
                 \Illuminate\Support\Arr::set($data, $key, false);
             }else if (in_array('array', explode('|', $value))) {
                 \Illuminate\Support\Arr::set($data, $key, []);
+            }
+        }
+
+        return $data;
+    }
+
+    public function getRequireds(string $validatorName) {
+        $data = [];
+
+        foreach ($this->rules[$validatorName] as $key => $value) {
+            $key = str_replace('*', '0', $key);
+            if (in_array('required', explode('|', $value))) {
+                $data[] = $key;
             }
         }
 

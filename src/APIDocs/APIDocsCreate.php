@@ -53,6 +53,7 @@ class APIDocsCreate
         $params = $info['params'] ?? [];
         $queries = $info['queries'] ?? [];
         $body = $info['body'] ?? [];
+        $bodyDescription = $info['bodyDescription'] ?? [];
         $bodyRequired = $info['bodyRequired'] ?? [];
         $ignoreBody = $info['ignoreBody'] ?? [];
 
@@ -196,7 +197,6 @@ class APIDocsCreate
                     if (in_array($key, $ignore))
                         return false;
                 }
-
                 return true;
             })
             ->mapWithKeys(function($value, $key) use ($ignore) {

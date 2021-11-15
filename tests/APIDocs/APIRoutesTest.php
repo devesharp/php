@@ -271,12 +271,17 @@ paths:
             'data' => [
                 'name' => 'John',
                 'age' => 1,
+                'item' => [
+                    'id' => 1
+                ]
             ],
             'validatorClass' => \Tests\APIDocs\Mocks\ValidatorStub::class,
             'validatorMethod' => 'create'
         ]);
 
         $responseDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance()->toYml();
+
+        var_dump($responseDocs);
 
         $this->assertEquals($responseDocs, "openapi: 3.0.2
 info:
@@ -334,6 +339,12 @@ paths:
                 age:
                   type: integer
                   example: 1
+                item:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
                 active:
                   type: boolean
                   example: false
@@ -348,12 +359,6 @@ paths:
                   example:
                     -
                       id: 1
-                item:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
 ");
 
     }

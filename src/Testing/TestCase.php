@@ -61,6 +61,9 @@ trait TestCase
 
         if (class_exists($validator) && !empty($validatorMethod)) {
             $args['body'] = app($validator)->convertValidatorToData($validatorMethod, $data);
+
+        } else {
+            $args['body'] = $data;
         }
 
         $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
@@ -122,6 +125,8 @@ trait TestCase
 
         if (class_exists($validator) && !empty($validatorMethod)) {
             $args['body'] = app($validator)->convertValidatorToData($validatorMethod, $data);
+        } else {
+            $args['body'] = $data;
         }
 
         $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();

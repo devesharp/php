@@ -18,8 +18,16 @@ class ServiceNameRouteTest extends TestCase
         $user->access_token = JWTAuth::fromUser($user);
         $ServiceNameData = ServiceName::factory()->raw();
 
-        $response = $this->post('api/{{route}}', $ServiceNameData, [
-            'Authorization' => 'Bearer ' . $user->access_token
+        $response = $this->withPost([
+            'name' => 'Criar ServiceName',
+            'group' => ['ServiceName'],
+            'uri' => 'api/{{route}}',
+            'data' => $ServiceNameData,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $user->access_token
+            ],
+            'validatorClass' => \App\Validators\ServiceNameValidator::class,
+            'validatorMethod' => 'create'
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -39,8 +47,23 @@ class ServiceNameRouteTest extends TestCase
         $ServiceNameData = ServiceName::factory()->raw();
         $resource = ServiceName::factory()->create();
 
-        $response = $this->post('api/{{route}}/' . $resource->id, $ServiceNameData, [
-            'Authorization' => 'Bearer ' . $user->access_token
+        $response = $this->withPost([
+            'name' => 'Update ServiceName',
+            'group' => ['ServiceName'],
+            'uri' => 'api/{{route}}/:id',
+            'params' => [
+                [
+                    'name' => 'id',
+                    'value' => $resource->id,
+                    'description' => 'ID ServiceName',
+                ]
+            ],
+            'data' => $ServiceNameData,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $user->access_token
+            ],
+            'validatorClass' => \App\Validators\ServiceNameValidator::class,
+            'validatorMethod' => 'update'
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -60,8 +83,20 @@ class ServiceNameRouteTest extends TestCase
 
         $resource = ServiceName::factory()->create();
 
-        $response = $this->get('api/{{route}}/' . $resource->id, [
-            'Authorization' => 'Bearer ' . $user->access_token
+        $response = $this->withGet([
+            'name' => 'Get ServiceName',
+            'group' => ['ServiceName'],
+            'uri' => 'api/{{route}}/:id',
+            'params' => [
+                [
+                    'name' => 'id',
+                    'value' => $resource->id,
+                    'description' => 'ID ServiceName',
+                ]
+            ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $user->access_token
+            ]
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -80,10 +115,18 @@ class ServiceNameRouteTest extends TestCase
         $user->access_token = JWTAuth::fromUser($user);
         $resource = ServiceName::factory()->create();
 
-        $response = $this->post('api/{{route}}/search', [
-            'filters' => []
-        ], [
-            'Authorization' => 'Bearer ' . $user->access_token
+        $response = $this->withPost([
+            'name' => 'Search ServiceName',
+            'group' => ['ServiceName'],
+            'uri' => 'api/{{route}}/search',
+            'data' => [
+                'filters' => []
+            ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $user->access_token
+            ],
+            'validatorClass' => \App\Validators\ServiceNameValidator::class,
+            'validatorMethod' => 'update'
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -103,8 +146,23 @@ class ServiceNameRouteTest extends TestCase
 
         $resource = ServiceName::factory()->create();
 
-        $response = $this->delete('api/{{route}}/' . $resource->id, [], [
-            'Authorization' => 'Bearer ' . $user->access_token
+        $response = $this->withDelete([
+            'name' => 'Update ServiceName',
+            'group' => ['ServiceName'],
+            'uri' => 'api/{{route}}/:id',
+            'params' => [
+                [
+                    'name' => 'id',
+                    'value' => $resource->id,
+                    'description' => 'ID ServiceName',
+                ]
+            ],
+            'data' => [],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $user->access_token
+            ],
+            'validatorClass' => \App\Validators\ServiceNameValidator::class,
+            'validatorMethod' => 'delete'
         ]);
 
         $responseData = json_decode($response->getContent(), true);

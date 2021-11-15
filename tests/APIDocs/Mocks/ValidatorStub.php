@@ -12,9 +12,9 @@ class ValidatorStub extends Validator
             'age' => 'numeric|required',
             'active' => 'boolean',
             'properties' => 'array',
-            'properties.*.id' => 'numeric',
-            'item' => 'object',
-            'item.id' => 'numeric',
+            'properties.*.id' => 'numeric|required',
+            'item' => 'array',
+            'item.id' => 'numeric|required',
         ],
         'update' => [
             '_extends' => 'create',
