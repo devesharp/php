@@ -215,4 +215,28 @@ class Validator
 
         return $this;
     }
+
+    public function convertValidatorToData(string $validatorName, $data = []) {
+
+        $data = $this->validate($data, $this->getValidate($validatorName))->toArray();
+
+        foreach ($this->rules[$validatorName] as $key => $value) {
+            $key = str_replace('*', '0', $key);
+            if (in_array('string', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, 'string');
+            }else if (in_array('alpha_numeric', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, 'string');
+            }else if (in_array('alpha', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, 'string');
+            }else if (in_array('numeric', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, 1);
+            }else if (in_array('boolean', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, false);
+            }else if (in_array('array', explode('|', $value))) {
+                \Illuminate\Support\Arr::set($data, $key, []);
+            }
+        }
+
+        return $data;
+    }
 }

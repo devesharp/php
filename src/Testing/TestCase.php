@@ -34,4 +34,122 @@ trait TestCase
             $this->assertEquals($item, $array[$key], $key);
         }
     }
+
+    function withPost($args, $ignoreDocs = false) {
+        $args = $this->treatmentHttpArgs($args);
+        $args['method'] = 'post';
+        $args['summary'] = $args['name'];
+
+        $name = $args['name'];
+        $uri = $args['uri'];
+        $data = $args['data'] ?? [];
+        $headers = $args['headers'] ?? [];
+        $validator = $args['validatorClass'] ?? null;
+        $validatorMethod = $args['validatorMethod'] ?? null;
+
+        $response = $this->post($uri, $data, $headers);
+        $responseData = json_decode($response->getContent(), true);
+
+
+        $args['response'] = [
+            'status' => $response->getStatusCode(),
+            'body' => $responseData,
+            'description' => $args['response']['description'] ?? '',
+            'bodyRequired' => $args['response']['bodyRequired'] ?? [],
+            'ignoreBody' => $args['response']['ignoreBody'] ?? [],
+        ];
+
+        if (class_exists($validator) && !empty($validatorMethod)) {
+            $args['body'] = app($validator)->convertValidatorToData($validatorMethod, $data);
+        }
+
+        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
+        $apiDocs->addRoute($args);
+
+        return $response;
+    }
+
+    function withGet($args, $ignoreDocs = false) {
+        $args = $this->treatmentHttpArgs($args);
+        $args['method'] = 'get';
+        $args['summary'] = $args['name'];
+
+        $uri = $args['uri'];
+        $headers = $args['headers'] ?? [];
+        $validator = $args['validatorClass'] ?? null;
+        $validatorMethod = $args['validatorMethod'] ?? null;
+
+        $response = $this->get($uri, $headers);
+        $responseData = json_decode($response->getContent(), true);
+
+
+        $args['response'] = [
+            'status' => $response->getStatusCode(),
+            'body' => $responseData,
+            'description' => $args['response']['description'] ?? '',
+            'bodyRequired' => $args['response']['bodyRequired'] ?? [],
+            'ignoreBody' => $args['response']['ignoreBody'] ?? [],
+        ];
+
+
+        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
+        $apiDocs->addRoute($args);
+
+        return $response;
+    }
+
+    function withDelete($args, $ignoreDocs = false) {
+        $args = $this->treatmentHttpArgs($args);
+        $args['method'] = 'delete';
+        $args['summary'] = $args['name'];
+
+        $uri = $args['uri'];
+        $headers = $args['headers'] ?? [];
+        $data = $args['data'] ?? [];
+        $validator = $args['validatorClass'] ?? null;
+        $validatorMethod = $args['validatorMethod'] ?? null;
+
+        $response = $this->delete($uri, $data, $headers);
+        $responseData = json_decode($response->getContent(), true);
+
+        $args['response'] = [
+            'status' => $response->getStatusCode(),
+            'body' => $responseData,
+            'description' => $args['response']['description'] ?? '',
+            'bodyRequired' => $args['response']['bodyRequired'] ?? [],
+            'ignoreBody' => $args['response']['ignoreBody'] ?? [],
+        ];
+
+        if (class_exists($validator) && !empty($validatorMethod)) {
+            $args['body'] = app($validator)->convertValidatorToData($validatorMethod, $data);
+        }
+
+        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
+        $apiDocs->addRoute($args);
+
+        return $response;
+    }
+
+    private function treatmentHttpArgs($args) {
+
+        $uriForTest = $args['uri'];
+
+        if (!empty($args['params'] )) {
+            foreach ($args['params'] as $param) {
+                $uriForTest = str_replace(':' . $param['name'], $param['value'], $uriForTest);
+            }
+        }
+
+        if (!empty($args['query'] )) {
+            $query = [];
+            foreach ($args['query'] as $param) {
+                $query[] = $param['name'] . '=' . $param['value'];
+            }
+            $uriForTest = $uriForTest . '?' . implode('&', $query);
+        }
+
+        $args['uriForTest'] = $uriForTest;
+
+        return $args;
+    }
 }

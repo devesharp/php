@@ -8,6 +8,8 @@ use cebe\openapi\spec\PathItem;
 
 class APIDocsCreate
 {
+    private static $instance;
+
     public $title = 'API Docs';
 
     public $description = 'API Docs';
@@ -56,7 +58,7 @@ class APIDocsCreate
 
         //
         $responseStatus = $info['response']['status'];
-        $responseDescription = $info['response']['description'] ?? 'Resposta com sucesso';
+        $responseDescription = !empty($info['response']['description']) ? $info['response']['description'] : 'Resposta com sucesso';
         $responseBody = $info['response']['body'] ?? [];
         $responseBodyRequired = $info['response']['bodyRequired'] ?? [];
         $responseIgnoreBody = $info['response']['ignoreBody'] ?? [];
@@ -105,9 +107,7 @@ class APIDocsCreate
         }
 
         if (!isset($this->openAPIJSON->paths[$uri])) {
-            $this->openAPIJSON->paths[$uri] = new PathItem([
-                'description' => 'something'
-            ]);
+            $this->openAPIJSON->paths[$uri] = new PathItem([]);
         }
 
         if(!isset($this->openAPIJSON->paths[$uri]->{$method})) {
@@ -323,4 +323,13 @@ class APIDocsCreate
         ];
     }
 
+    public static function getInstance(): self
+    {
+        if(self::$instance === null){
+            self::$instance = new self;
+            self::$instance->init();
+        }
+
+        return self::$instance;
+    }
 }
