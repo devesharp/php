@@ -47,7 +47,7 @@ trait TestCase
         $validator = $args['validatorClass'] ?? null;
         $validatorMethod = $args['validatorMethod'] ?? null;
 
-        $response = $this->post($uri, $data, $headers);
+        $response = $this->post($args['uriForTest'], $data, $headers);
         $responseData = json_decode($response->getContent(), true);
 
 
@@ -82,7 +82,7 @@ trait TestCase
         $validator = $args['validatorClass'] ?? null;
         $validatorMethod = $args['validatorMethod'] ?? null;
 
-        $response = $this->get($uri, $headers);
+        $response = $this->get($args['uriForTest'], $headers);
         $responseData = json_decode($response->getContent(), true);
 
 
@@ -106,13 +106,12 @@ trait TestCase
         $args['method'] = 'delete';
         $args['summary'] = $args['name'];
 
-        $uri = $args['uri'];
         $headers = $args['headers'] ?? [];
         $data = $args['data'] ?? [];
         $validator = $args['validatorClass'] ?? null;
         $validatorMethod = $args['validatorMethod'] ?? null;
 
-        $response = $this->delete($uri, $data, $headers);
+        $response = $this->delete($args['uriForTest'], $data, $headers);
         $responseData = json_decode($response->getContent(), true);
 
         $args['response'] = [
@@ -151,6 +150,10 @@ trait TestCase
                 $query[] = $param['name'] . '=' . $param['value'];
             }
             $uriForTest = $uriForTest . '?' . implode('&', $query);
+        }
+
+        if ($uriForTest[0] != '/') {
+            $uriForTest = '/' . $uriForTest;
         }
 
         $args['uriForTest'] = $uriForTest;
