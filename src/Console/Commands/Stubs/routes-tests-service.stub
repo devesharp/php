@@ -48,7 +48,7 @@ class ServiceNameRouteTest extends TestCase
         $resource = ServiceName::factory()->create();
 
         $response = $this->withPost([
-            'name' => 'Update ServiceName',
+            'name' => 'Atualizar ServiceName',
             'group' => ['ServiceName'],
             'uri' => 'api/{{route}}/:id',
             'params' => [
@@ -84,7 +84,7 @@ class ServiceNameRouteTest extends TestCase
         $resource = ServiceName::factory()->create();
 
         $response = $this->withGet([
-            'name' => 'Get ServiceName',
+            'name' => 'Resgatar ServiceName',
             'group' => ['ServiceName'],
             'uri' => 'api/{{route}}/:id',
             'params' => [
@@ -116,7 +116,7 @@ class ServiceNameRouteTest extends TestCase
         $resource = ServiceName::factory()->create();
 
         $response = $this->withPost([
-            'name' => 'Search ServiceName',
+            'name' => 'Buscar ServiceName',
             'group' => ['ServiceName'],
             'uri' => 'api/{{route}}/search',
             'data' => [
@@ -147,7 +147,7 @@ class ServiceNameRouteTest extends TestCase
         $resource = ServiceName::factory()->create();
 
         $response = $this->withDelete([
-            'name' => 'Update ServiceName',
+            'name' => 'Deletar ServiceName',
             'group' => ['ServiceName'],
             'uri' => 'api/{{route}}/:id',
             'params' => [

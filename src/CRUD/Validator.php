@@ -232,6 +232,8 @@ class Validator
         foreach ($this->rules[$validatorName] as $key => $value) {
             $key = str_replace('*', '0', $key);
             $currentValue = \Illuminate\Support\Arr::get($data, $key);
+
+
             if (in_array('string', explode('|', $value))) {
                 if (empty($currentValue))
                     \Illuminate\Support\Arr::set($data, $key, 'string');

@@ -103,6 +103,18 @@ paths:
                   count:
                     type: integer
                     example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John
+                age:
+                  type: string
+                  example: John
 ");
 
     }
@@ -135,7 +147,7 @@ paths:
 
         $responseDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance()->toYml();
 
-        $this->assertEquals($responseDocs, "openapi: 3.0.2
+        $this->assertEquals("openapi: 3.0.2
 info:
   title: 'API Docs'
   description: 'API Docs'
@@ -166,23 +178,14 @@ paths:
             type: integer
           example: 1
       responses:
-        '200':
+        '404':
           description: 'Resposta com sucesso'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: John
-                  age:
-                    type: string
-                    example: '10'
-");
+                properties: []
+", $responseDocs);
 
     }
 
@@ -214,7 +217,7 @@ paths:
 
         $responseDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance()->toYml();
 
-        $this->assertEquals($responseDocs, "openapi: 3.0.2
+        $this->assertEquals("openapi: 3.0.2
 info:
   title: 'API Docs'
   description: 'API Docs'
@@ -245,20 +248,26 @@ paths:
             type: integer
           example: 1
       responses:
-        '200':
+        '404':
           description: 'Resposta com sucesso'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  deleted:
-                    type: boolean
-                    example: true
-");
+                properties: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John
+                age:
+                  type: string
+                  example: John
+", $responseDocs);
 
     }
 
@@ -280,8 +289,6 @@ paths:
         ]);
 
         $responseDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance()->toYml();
-
-        var_dump($responseDocs);
 
         $this->assertEquals($responseDocs, "openapi: 3.0.2
 info:
@@ -335,7 +342,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: string
+                  example: John
                 age:
                   type: integer
                   example: 1
