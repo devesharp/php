@@ -343,6 +343,7 @@ paths:
                 name:
                   type: string
                   example: John
+                  description: 'Nome do recurso'
                 age:
                   type: integer
                   example: 1
@@ -352,6 +353,8 @@ paths:
                     id:
                       type: integer
                       example: 1
+                  required:
+                    - id
                 active:
                   type: boolean
                   example: false
@@ -366,6 +369,9 @@ paths:
                   example:
                     -
                       id: 1
+              required:
+                - name
+                - age
 ");
 
     }

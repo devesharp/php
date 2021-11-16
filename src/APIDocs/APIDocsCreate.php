@@ -112,14 +112,7 @@ class APIDocsCreate
         }
 
         if(!isset($this->openAPIJSON->paths[$uri]->{$method})) {
-            $schema = [
-                'type' => 'object',
-                'properties' => $this->getData($body, $ignoreBody ?? [])
-            ];
-
-            if (!empty($bodyRequired)) {
-                $schema['required'] = $bodyRequired;
-            }
+            $schema = $this->getData($body, ['required' => $bodyRequired, 'description' => $bodyDescription]);
 
             $this->openAPIJSON->paths[$uri]->{$method} = new \cebe\openapi\spec\Operation([
                 'tags' => $tags ?? [],
@@ -140,10 +133,7 @@ class APIDocsCreate
             }
         }
 
-        $schema = [
-            'type' => 'object',
-            'properties' => $this->getData($responseBody, $responseIgnoreBody)
-        ];
+        $schema = $this->getData($responseBody);
 
         if (!empty($responseBodyRequired)) {
             $schema['required'] = $responseBodyRequired;
@@ -161,10 +151,7 @@ class APIDocsCreate
         foreach ($this->defaultsResponses as $defaultsResponse) {
             if (($defaultsResponse['only'] == '*' || !!preg_match('', $uri)) && (empty($defaultsResponse['without']) || !preg_match($defaultsResponse['without'], $uri))) {
 
-                $schema = [
-                    'type' => 'object',
-                    'properties' => $this->getData($defaultsResponse['response']['body'])
-                ];
+                $schema = $this->getData($defaultsResponse['response']['body']);
 
                 if (!empty($responseBodyRequired)) {
                     $schema['required'] = $responseBodyRequired;
@@ -190,16 +177,24 @@ class APIDocsCreate
         $this->refs[$refName] = $ref;
     }
 
-    function getData($data, $ignore = []) {
+    function getData($data, $options = []) {
+        $options['required'] = \Devesharp\Support\Collection::make($options['required'] ?? [])
+            ->map(function ($item) {
+               return 'data.'.$item;
+            })->toArray();
+
+        $options['description'] = \Devesharp\Support\Collection::make($options['description'] ?? [])
+            ->mapWithKeys(function ($value, $key) {
+                return ['data.' . $key => $value];
+            })->toArray();
+
+        return $this->threeData(['data' => $data], $options)['data'];
+    }
+
+    function threeData($data, $options = [], $root = '') {
+        $path = empty($root) ? $root : $root . '.';
         return \Illuminate\Support\Collection::make($data)
-            ->filter(function ($value, $key) use ($ignore) {
-                if(!empty($ignore)) {
-                    if (in_array($key, $ignore))
-                        return false;
-                }
-                return true;
-            })
-            ->mapWithKeys(function($value, $key) use ($ignore) {
+            ->mapWithKeys(function($value, $key) use ($path, $options) {
                 if (is_string($value)) {
                     $keyItem = str_replace('$', '', $value);
                     if (!empty($this->refs[$keyItem])) {
@@ -213,13 +208,19 @@ class APIDocsCreate
                     }
                 }
 
+//                var_dump($path);
                 if (gettype($value) == 'array') {
+
+                    $newKey = $key;
+                    if ($newKey == 0) {
+                        $newKey = '*';
+                    }
 
                     if (!\Devesharp\Support\Helpers::isArrayAssoc($value)) {
                         return [
                             $key => [
                                 'type' => 'array',
-                                'items' => $this->getData($value, $ignore)[0],
+                                'items' => $this->threeData($value, $options, $path . $newKey)[0],
                                 'example' => $value
                             ]
                         ];
@@ -237,19 +238,33 @@ class APIDocsCreate
                         ];
                     }
 
+                    $valueKeys = [
+                        'type' => 'object',
+                        'properties' => $this->threeData($value, $options, $path . $newKey)
+                    ];
+
+                    foreach (array_keys($value) as $array_key) {
+                        if (in_array($path . $newKey   .'.'. $array_key, $options['required'] ?? [])) {
+                            $valueKeys['required'][] = $array_key;
+                        }
+                    }
+
                     return [
-                        $key => [
-                            'type' => 'object',
-                            'properties' => $this->getData($value, $ignore),
-                        ]
+                        $key => $valueKeys
                     ];
                 }
 
+                $valueKeys = [
+                    'type' => gettype($value),
+                    'example' => $value,
+                ];
+
+                if (isset($options['description'][$path . $key])) {
+                    $valueKeys['description'] = $options['description'][$path . $key];
+                }
+
                 return [
-                    $key => [
-                        'type' => gettype($value),
-                        'example' => $value,
-                    ]
+                    $key => $valueKeys
                 ];
             })->toArray();
     }

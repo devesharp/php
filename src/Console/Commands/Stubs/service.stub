@@ -16,7 +16,7 @@ class ServiceNameService extends Service
         ],
     ];
 
-    public string $sort_default = 'id';
+    public string $sort_default = '-id';
 
     public array $filters = [
         // Filter default

@@ -6,6 +6,12 @@ use Devesharp\CRUD\Validator;
 
 class ValidatorStub extends Validator
 {
+    protected array $descriptions = [
+      'create' => [
+          'name' => 'Nome do recurso'
+      ]
+    ];
+
     protected array $rules = [
         'create' => [
             'name' => 'string|max:100|required',

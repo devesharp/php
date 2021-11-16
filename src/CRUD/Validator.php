@@ -15,6 +15,12 @@ class Validator
     protected array $rules = [];
 
     /**
+     * Descrições dos valores
+     * @var array
+     */
+    protected array $descriptions = [];
+
+    /**
      * Remover dados adicionais
      */
     protected bool $additionalProperties = false;
@@ -229,10 +235,20 @@ class Validator
             \Illuminate\Support\Arr::set($data, 'query.sort', '');
         }
 
-        foreach ($this->rules[$validatorName] as $key => $value) {
+        $rules = $this->rules[$validatorName];
+
+        if (! empty($this->rules[$validatorName]['_extends'])) {
+            $rules = $this->getExtendsValidator(
+                $this->rules[$validatorName],
+                $this->rules[$validatorName]['_extends'],
+            );
+        }
+
+        foreach ($rules as $key => $value) {
+            if ($key == '_extends') continue;
+
             $key = str_replace('*', '0', $key);
             $currentValue = \Illuminate\Support\Arr::get($data, $key);
-
 
             if (in_array('string', explode('|', $value))) {
                 if (empty($currentValue))
@@ -269,5 +285,22 @@ class Validator
         }
 
         return $data;
+    }
+
+    public function getDescriptions(string $validatorName) {
+        $data = [];
+
+        if (!isset($this->descriptions[$validatorName])) {
+            return $data;
+        }
+
+        $descriptions = $this->descriptions[$validatorName];
+
+        if (! empty($this->rules[$validatorName]['_extends'])) {
+            $descriptionsExtends = $this->descriptions[$this->rules[$validatorName]['_extends']];
+            $descriptions = array_merge_recursive($descriptionsExtends, $descriptions);
+        }
+
+        return $descriptions;
     }
 }

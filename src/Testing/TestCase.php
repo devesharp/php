@@ -61,7 +61,8 @@ trait TestCase
 
         if (class_exists($validator) && !empty($validatorMethod)) {
             $args['body'] = app($validator)->convertValidatorToData($validatorMethod, $data);
-
+            $args['bodyRequired'] = app($validator)->getRequireds($validatorMethod);
+            $args['bodyDescription'] = app($validator)->getDescriptions($validatorMethod);
         } else {
             $args['body'] = $data;
         }
