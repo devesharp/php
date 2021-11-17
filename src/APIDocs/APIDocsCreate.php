@@ -24,6 +24,8 @@ class APIDocsCreate
 
     private $defaultsResponses = [];
 
+    private $empty = true;
+
     private string $file = 'openapi-docs.yml';
 
     function init($increment = false) {
@@ -45,6 +47,8 @@ class APIDocsCreate
     }
 
     function addRoute($info) {
+        $this->empty = false;
+
         $tags = $info['group'];
         $method = $info['method'];
         $summary = $info['summary'] ?? '';
@@ -319,8 +323,8 @@ class APIDocsCreate
             ];
         }
 
-        if ($file) {
-            file_put_contents(\cebe\openapi\Writer::writeToYaml($this->openAPIJSON), $file);
+        if ($file && !$this->empty) {
+            file_put_contents($file, \cebe\openapi\Writer::writeToYaml($this->openAPIJSON));
         }
 
         return \cebe\openapi\Writer::writeToYaml($this->openAPIJSON);
