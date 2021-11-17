@@ -57,7 +57,8 @@ class MakeProvider extends ServiceProvider
         $apiDocs->setTitle(config('devesharp.APIDocs.name', 'API Docs'));
         $apiDocs->setDescription(config('devesharp.APIDocs.description', ''));
         foreach (config('devesharp.APIDocs.servers', []) as $item) {
-            $apiDocs->addServers($item['url'], $item['name']);
+            if (!empty($item['url']))
+                $apiDocs->addServers($item['url'], $item['description'] ?? '');
         }
         $apiDocs->init();
     }
