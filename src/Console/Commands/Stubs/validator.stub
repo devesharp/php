@@ -6,7 +6,7 @@ use Devesharp\CRUD\Validator;
 
 class ServiceValidator extends Validator
 {
-    
+
     protected array $rules = [
         'create' => [
             'name' => 'string|max:100|required',

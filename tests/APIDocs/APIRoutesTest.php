@@ -30,6 +30,13 @@ class APIRoutesTest extends \Tests\TestCase
                 'count' => 1,
             ];
         });
+        \Route::middleware([])->post('/resource2', function () {
+            return [
+                'id' => 1,
+                'name' => 'John',
+                'age' => '10',
+            ];
+        });
         \Route::middleware([])->get('/resource/:id', function () {
             return [
                 'id' => 1,
@@ -343,6 +350,114 @@ paths:
                 name:
                   type: string
                   example: John
+                  description: 'Nome do recurso'
+                age:
+                  type: integer
+                  example: 1
+                item:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                  required:
+                    - id
+                active:
+                  type: boolean
+                  example: false
+                properties:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                  example:
+                    -
+                      id: 1
+              required:
+                - name
+                - age
+");
+
+    }
+
+    public function testWithDic()
+    {
+        $response = $this->withPost([
+            'name' => 'Criar Resources',
+            'group' => ['Resources'],
+            'uri' => '/resource2',
+            'params' => [
+                [
+                    'name' => 'id',
+                    'value' => 1,
+                    'description' => 'id resource',
+                ]
+            ],
+            'data' => [
+                'name' => 'John',
+                'age' => 1,
+                'item' => [
+                    'id' => 1
+                ]
+            ],
+            'dicClass' => \Tests\APIDocs\Mocks\DicStub::class,
+            'validatorClass' => \Tests\APIDocs\Mocks\ValidatorStub::class,
+            'validatorMethod' => 'create'
+        ]);
+
+        $responseDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance()->toYml();
+
+        $this->assertEquals($responseDocs, "openapi: 3.0.2
+info:
+  title: 'API Docs'
+  description: 'API Docs'
+  version: '1.0'
+servers: []
+paths:
+  /resource2:
+    post:
+      tags:
+        - Associações
+      summary: 'Criar Associações'
+      description: ''
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id resource'
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: 'Resposta com sucesso'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Leo
+                  age:
+                    type: string
+                    example: '10'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Leona
                   description: 'Nome do recurso'
                 age:
                   type: integer

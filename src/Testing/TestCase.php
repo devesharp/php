@@ -39,6 +39,7 @@ trait TestCase
         $args = $this->treatmentHttpArgs($args);
         $args['method'] = 'post';
         $args['summary'] = $args['name'];
+        $args['context'] = $args['validatorMethod'];
 
         $name = $args['name'];
         $uri = $args['uri'];
@@ -77,6 +78,7 @@ trait TestCase
         $args = $this->treatmentHttpArgs($args);
         $args['method'] = 'get';
         $args['summary'] = $args['name'];
+//        $args['context'] = $args['validatorMethod'];
 
         $uri = $args['uri'];
         $headers = $args['headers'] ?? [];
@@ -106,6 +108,7 @@ trait TestCase
         $args = $this->treatmentHttpArgs($args);
         $args['method'] = 'delete';
         $args['summary'] = $args['name'];
+        $args['context'] = $args['validatorMethod'];
 
         $headers = $args['headers'] ?? [];
         $data = $args['data'] ?? [];

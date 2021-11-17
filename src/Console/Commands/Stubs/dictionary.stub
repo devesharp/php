@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Validators;
+
+use Devesharp\CRUD\Validator;
+
+class ServiceDictionary extends \Devesharp\APIDocs\Dictionary
+{
+
+}

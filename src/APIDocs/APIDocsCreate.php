@@ -57,6 +57,14 @@ class APIDocsCreate
         $bodyRequired = $info['bodyRequired'] ?? [];
         $ignoreBody = $info['ignoreBody'] ?? [];
 
+        if (!empty($info['dicClass']) && class_exists($info['dicClass']) && isset($info['context'])) {
+            $dic = app($info['dicClass']);
+            $summary = $dic->replaceString($summary);
+            if ($tags) {
+                $tags = \Devesharp\Support\Collection::make($tags)->map(fn($i) => $dic->replaceString($i))->toArray();
+            }
+        }
+
         //
         $responseStatus = $info['response']['status'];
         $responseDescription = !empty($info['response']['description']) ? $info['response']['description'] : 'Resposta com sucesso';
@@ -112,7 +120,13 @@ class APIDocsCreate
         }
 
         if(!isset($this->openAPIJSON->paths[$uri]->{$method})) {
-            $schema = $this->getData($body, ['required' => $bodyRequired, 'description' => $bodyDescription]);
+            $schema = $this->getData($body, [
+                'required' => $bodyRequired,
+                'description' => $bodyDescription,
+                'dicClass' => $info['dicClass'],
+                'context' => $info['context'],
+                'type' => 'body'
+            ]);
 
             $this->openAPIJSON->paths[$uri]->{$method} = new \cebe\openapi\spec\Operation([
                 'tags' => $tags ?? [],
@@ -133,7 +147,11 @@ class APIDocsCreate
             }
         }
 
-        $schema = $this->getData($responseBody);
+        $schema = $this->getData($responseBody, [
+            'dicClass' => $info['dicClass'],
+            'context' => $info['context'],
+            'type' => 'response'
+        ]);
 
         if (!empty($responseBodyRequired)) {
             $schema['required'] = $responseBodyRequired;
@@ -193,8 +211,19 @@ class APIDocsCreate
 
     function threeData($data, $options = [], $root = '') {
         $path = empty($root) ? $root : $root . '.';
+        $dic = null;
+
+        if (!empty($options['dicClass']) && class_exists($options['dicClass']) && isset($options['context'])) {
+            $dic = app($options['dicClass']);
+        }
+
         return \Illuminate\Support\Collection::make($data)
-            ->mapWithKeys(function($value, $key) use ($path, $options) {
+            ->mapWithKeys(function($value, $key) use ($path, $options, $dic) {
+                if (!empty($dic)) {
+                    $keyNew = str_replace('data.', '', $path . $key);
+                    $value = $dic->checkKeyReplace($options['context'], $options['type'] ?? 'body', $keyNew, $value);
+                }
+
                 if (is_string($value)) {
                     $keyItem = str_replace('$', '', $value);
                     if (!empty($this->refs[$keyItem])) {
@@ -208,7 +237,6 @@ class APIDocsCreate
                     }
                 }
 
-//                var_dump($path);
                 if (gettype($value) == 'array') {
 
                     $newKey = $key;
