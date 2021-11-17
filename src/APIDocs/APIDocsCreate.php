@@ -305,7 +305,7 @@ class APIDocsCreate
         ];
     }
 
-    public function toYml(): string
+    public function toYml($file = null): string
     {
         $refs = [];
         $refsEnabled = array_values(array_unique($this->refsEnabled));
@@ -317,6 +317,10 @@ class APIDocsCreate
             $this->openAPIJSON->components = [
                 'schemas' => $refs
             ];
+        }
+
+        if ($file) {
+            file_put_contents(\cebe\openapi\Writer::writeToYaml($this->openAPIJSON), $file);
         }
 
         return \cebe\openapi\Writer::writeToYaml($this->openAPIJSON);

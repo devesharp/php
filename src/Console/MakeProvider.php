@@ -27,6 +27,9 @@ class MakeProvider extends ServiceProvider
      */
     public function boot()
     {
+        /**
+         * Register makes
+         */
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeAll::class,
@@ -44,6 +47,18 @@ class MakeProvider extends ServiceProvider
                 MakePolicy::class,
             ]);
         }
+
+        $path = realpath(__DIR__.'../../config/config.php');
+        $this->publishes([$path => config_path('devesharp.php')], 'config');
+        $this->mergeConfigFrom($path, 'devesharp');
+
+        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
+        $apiDocs->setTitle(config('devesharp.APIDocs.name', 'API Docs'));
+        $apiDocs->setDescription(config('devesharp.APIDocs.description', ''));
+        foreach (config('devesharp.APIDocs.servers', []) as $item) {
+            $apiDocs->addServers($item['url'], $item['name']);
+        }
+        $apiDocs->init();
     }
 
     /**
@@ -54,5 +69,11 @@ class MakeProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    public function __destruct()
+    {
+        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
+        $apiDocs->toYml(config('devesharp.APIDocs.save_file'));
     }
 }
