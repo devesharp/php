@@ -49,6 +49,7 @@ class MakeProvider extends ServiceProvider
         }
 
         $path = realpath(__DIR__.'../../config/config.php');
+        var_dump($path);
         $this->publishes([$path => config_path('devesharp.php')], 'config');
         $this->mergeConfigFrom($path, 'devesharp');
 
