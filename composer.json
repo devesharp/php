@@ -18,8 +18,7 @@
         "php": ">=8.0",
         "ext-json": "*",
         "illuminate/database": "~5.0|~6.0|~7.0|^8.0",
-        "cebe/php-openapi": "^1.5",
-        "nikic/php-parser": "^4.13"
+        "cebe/php-openapi": "^1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
