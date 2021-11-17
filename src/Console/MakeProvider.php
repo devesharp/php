@@ -20,6 +20,7 @@ use Illuminate\Support\ServiceProvider;
 
 class MakeProvider extends ServiceProvider
 {
+    protected string $file = '';
     /**
      * Bootstrap the application services.
      *
@@ -49,13 +50,15 @@ class MakeProvider extends ServiceProvider
         }
 
         $path = realpath(__DIR__.'/../../config/config.php');
-        var_dump($path);
         $this->publishes([$path => config_path('devesharp.php')], 'config');
         $this->mergeConfigFrom($path, 'devesharp');
 
         $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
         $apiDocs->setTitle(config('devesharp.APIDocs.name', 'API Docs'));
         $apiDocs->setDescription(config('devesharp.APIDocs.description', ''));
+
+        $this->file = config('devesharp.APIDocs.save_file');
+
         foreach (config('devesharp.APIDocs.servers', []) as $item) {
             if (!empty($item['url']))
                 $apiDocs->addServers($item['url'], $item['description'] ?? '');
@@ -76,6 +79,6 @@ class MakeProvider extends ServiceProvider
     public function __destruct()
     {
         $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
-        $apiDocs->toYml(config('devesharp.APIDocs.save_file'));
+        $apiDocs->toYml($this->file);
     }
 }
