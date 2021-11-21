@@ -12,13 +12,25 @@ class DicStub extends \Devesharp\APIDocs\Dictionary
 
     protected $replaceBodyKeys = [
       'create' => [
-          'name' => 'Leona'
+          'name' => 'Leona',
+          'age' => '$AgeType',
       ]
     ];
 
     protected $replaceResponseKeys = [
         'create' => [
             'name' => 'Leo'
+        ]
+    ];
+
+    protected $addAPIComponents = [
+        'AgeType' => [
+            'type' => 'string',
+            'description' => '',
+            'enum' => [
+                'vehicles',
+                'events'
+            ],
         ]
     ];
 }

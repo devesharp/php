@@ -14,6 +14,8 @@ class Dictionary
 
     protected $replaceResponseKeys = [];
 
+    protected $addAPIComponents = [];
+
     function checkKeyReplace($context, $type, $key, $default = null) {
         if ($type == 'body') {
             return $this->replaceBodyKeys[$context][$key] ?? $default;
@@ -26,5 +28,9 @@ class Dictionary
 
     function replaceString($string) {
         return str_replace(array_keys($this->apiDic), array_values($this->apiDic), $string);
+    }
+
+    function getAPIComponents() {
+        return $this->addAPIComponents;
     }
 }

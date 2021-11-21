@@ -64,6 +64,10 @@ class APIDocsCreate
         if (!empty($info['dicClass']) && class_exists($info['dicClass']) && isset($info['context'])) {
             $dic = app($info['dicClass']);
             $summary = $dic->replaceString($summary);
+            \Devesharp\Support\Collection::make($dic->getAPIComponents())
+                ->each(function ($value, $key) {
+                    $this->setRefToKey($key, $value);
+                });
             if ($tags) {
                 $tags = \Devesharp\Support\Collection::make($tags)->map(fn($i) => $dic->replaceString($i))->toArray();
             }
@@ -127,8 +131,8 @@ class APIDocsCreate
             $schema = $this->getData($body, [
                 'required' => $bodyRequired,
                 'description' => $bodyDescription,
-                'dicClass' => $info['dicClass'],
-                'context' => $info['context'],
+                'dicClass' => $info['dicClass'] ?? null,
+                'context' => $info['context'] ?? '',
                 'type' => 'body'
             ]);
 
@@ -152,8 +156,8 @@ class APIDocsCreate
         }
 
         $schema = $this->getData($responseBody, [
-            'dicClass' => $info['dicClass'],
-            'context' => $info['context'],
+            'dicClass' => $info['dicClass'] ?? null,
+            'context' => $info['context'] ?? '',
             'type' => 'response'
         ]);
 

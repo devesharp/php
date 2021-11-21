@@ -389,13 +389,6 @@ paths:
             'name' => 'Criar Resources',
             'group' => ['Resources'],
             'uri' => '/resource2',
-            'params' => [
-                [
-                    'name' => 'id',
-                    'value' => 1,
-                    'description' => 'id resource',
-                ]
-            ],
             'data' => [
                 'name' => 'John',
                 'age' => 1,
@@ -412,8 +405,8 @@ paths:
 
         $this->assertEquals($responseDocs, "openapi: 3.0.2
 info:
-  title: 'API Docs'
-  description: 'API Docs'
+  title: 'API '
+  description: ''
   version: '1.0'
 servers: []
 paths:
@@ -423,15 +416,7 @@ paths:
         - Associações
       summary: 'Criar Associações'
       description: ''
-      parameters:
-        -
-          name: id
-          in: path
-          description: 'id resource'
-          required: true
-          schema:
-            type: integer
-          example: 1
+      parameters: []
       responses:
         '200':
           description: 'Resposta com sucesso'
@@ -460,8 +445,7 @@ paths:
                   example: Leona
                   description: 'Nome do recurso'
                 age:
-                  type: integer
-                  example: 1
+                  \$ref: '#/components/schemas/AgeType'
                 item:
                   type: object
                   properties:
@@ -487,6 +471,14 @@ paths:
               required:
                 - name
                 - age
+components:
+  schemas:
+    AgeType:
+      type: string
+      description: ''
+      enum:
+        - vehicles
+        - events
 ");
 
     }
