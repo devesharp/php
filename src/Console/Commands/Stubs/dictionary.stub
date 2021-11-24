@@ -1,10 +1,50 @@
 <?php
 
-namespace App\Validators;
+namespace App\Dictionaries;
 
-use Devesharp\CRUD\Validator;
+use Devesharp\APIDocs\Dictionary;
 
-class ServiceDictionary extends \Devesharp\APIDocs\Dictionary
+class ServiceDictionary extends Dictionary
 {
+    protected $apiDic = [
+        'Service' => 'Service'
+    ];
 
+    protected $replaceBodyKeys = [
+        'create' => [
+        ],
+        'get' => [
+        ],
+        'update' => [
+        ],
+        'search' => [
+        ],
+        'delete' => [
+        ],
+    ];
+
+    protected $replaceResponseKeys = [
+        'create' => [
+        ],
+        'get' => [
+        ],
+        'update' => [
+        ],
+        'search' => [
+        ],
+        'delete' => [
+        ],
+    ];
+
+    protected $addAPIComponents = [
+//        Example components
+//        'AgeType' => [
+//            'type' => 'string',
+//            'description' => '',
+//            'enum' => [
+//                'vehicles',
+//                'events'
+//            ],
+//        ]
+    ];
 }

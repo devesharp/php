@@ -15,7 +15,7 @@ class MakeRoute extends Command
      *
      * @var string
      */
-    protected $name = 'ds:routecrud';
+    protected $name = 'ds:route';
 
     /**
      * The console command description.

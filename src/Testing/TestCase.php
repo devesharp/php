@@ -78,7 +78,7 @@ trait TestCase
         $args = $this->treatmentHttpArgs($args);
         $args['method'] = 'get';
         $args['summary'] = $args['name'];
-//        $args['context'] = $args['validatorMethod'];
+        $args['context'] = $args['validatorMethod'];
 
         $uri = $args['uri'];
         $headers = $args['headers'] ?? [];

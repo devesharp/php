@@ -15,12 +15,12 @@ use Devesharp\Console\Commands\MakeService;
 use Devesharp\Console\Commands\MakeTransformer;
 use Devesharp\Console\Commands\MakeUnitTestService;
 use Devesharp\Console\Commands\MakeValidator;
+use Devesharp\Console\Commands\MakeDictionary;
 use UpInside\LaravelMakeTrait\Commands\TraitMakeCommand;
 use Illuminate\Support\ServiceProvider;
 
 class MakeProvider extends ServiceProvider
 {
-    protected string $file = '';
     /**
      * Bootstrap the application services.
      *
@@ -45,40 +45,9 @@ class MakeProvider extends ServiceProvider
                 MakeValidator::class,
                 MakeFactoryService::class,
                 MakeController::class,
+                MakeDictionary::class,
                 MakePolicy::class,
             ]);
         }
-
-        $path = realpath(__DIR__.'/../../config/config.php');
-        $this->publishes([$path => config_path('devesharp.php')], 'config');
-        $this->mergeConfigFrom($path, 'devesharp');
-
-        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
-        $apiDocs->setTitle(config('devesharp.APIDocs.name', 'API Docs'));
-        $apiDocs->setDescription(config('devesharp.APIDocs.description', ''));
-
-        $this->file = config('devesharp.APIDocs.save_file');
-
-        foreach (config('devesharp.APIDocs.servers', []) as $item) {
-            if (!empty($item['url']))
-                $apiDocs->addServers($item['url'], $item['description'] ?? '');
-        }
-        $apiDocs->init();
-    }
-
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    public function __destruct()
-    {
-        $apiDocs = \Devesharp\APIDocs\APIDocsCreate::getInstance();
-        $apiDocs->toYml($this->file);
     }
 }

@@ -26,6 +26,7 @@ class ServiceNameRouteTest extends TestCase
             'headers' => [
                 'Authorization' => 'Bearer ' . $user->access_token
             ],
+            'dicClass' => \App\Dictionaries\ServiceNameDictionary::class,
             'validatorClass' => \App\Validators\ServiceNameValidator::class,
             'validatorMethod' => 'create'
         ]);
@@ -62,6 +63,7 @@ class ServiceNameRouteTest extends TestCase
             'headers' => [
                 'Authorization' => 'Bearer ' . $user->access_token
             ],
+            'dicClass' => \App\Dictionaries\ServiceNameDictionary::class,
             'validatorClass' => \App\Validators\ServiceNameValidator::class,
             'validatorMethod' => 'update'
         ]);
@@ -96,7 +98,10 @@ class ServiceNameRouteTest extends TestCase
             ],
             'headers' => [
                 'Authorization' => 'Bearer ' . $user->access_token
-            ]
+            ],
+            'dicClass' => \App\Dictionaries\ServiceNameDictionary::class,
+            'validatorClass' => \App\Validators\ServiceNameValidator::class,
+            'validatorMethod' => 'get'
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -125,6 +130,7 @@ class ServiceNameRouteTest extends TestCase
             'headers' => [
                 'Authorization' => 'Bearer ' . $user->access_token
             ],
+            'dicClass' => \App\Dictionaries\ServiceNameDictionary::class,
             'validatorClass' => \App\Validators\ServiceNameValidator::class,
             'validatorMethod' => 'search'
         ]);
@@ -161,6 +167,7 @@ class ServiceNameRouteTest extends TestCase
             'headers' => [
                 'Authorization' => 'Bearer ' . $user->access_token
             ],
+            'dicClass' => \App\Dictionaries\ServiceNameDictionary::class,
             'validatorClass' => \App\Validators\ServiceNameValidator::class,
             'validatorMethod' => 'delete'
         ]);
