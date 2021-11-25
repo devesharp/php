@@ -75,7 +75,7 @@ class APIDocsCreate
 
         //
         $responseStatus = $info['response']['status'];
-        $responseDescription = !empty($info['response']['description']) ? $info['response']['description'] : 'Resposta com sucesso';
+        $responseDescription = !empty($info['response']['description']) ? $info['response']['description'] : '';
         $responseBody = $info['response']['body'] ?? [];
         $responseBodyRequired = $info['response']['bodyRequired'] ?? [];
         $responseIgnoreBody = $info['response']['ignoreBody'] ?? [];

@@ -1,0 +1,76 @@
+openapi: 3.0.2
+info:
+  title: 'API '
+  description: ''
+  version: '1.0'
+servers: []
+paths:
+  /resource2:
+    post:
+      tags:
+        - Associações
+      summary: 'Criar Associações'
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Leo
+                  age:
+                    type: string
+                    example: '10'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Leona
+                  description: 'Nome do recurso'
+                age:
+                  $ref: '#/components/schemas/AgeType'
+                item:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                  required:
+                    - id
+                active:
+                  type: boolean
+                  example: false
+                properties:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                  example:
+                    -
+                      id: 1
+              required:
+                - name
+                - age
+components:
+  schemas:
+    AgeType:
+      type: string
+      description: ''
+      enum:
+        - vehicles
+        - events

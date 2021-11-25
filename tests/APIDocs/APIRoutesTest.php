@@ -37,14 +37,14 @@ class APIRoutesTest extends \Tests\TestCase
                 'age' => '10',
             ];
         });
-        \Route::middleware([])->get('/resource/:id', function () {
+        \Route::middleware([])->get('/resource/{id}', function () {
             return [
                 'id' => 1,
                 'name' => 'John',
                 'age' => '10',
             ];
         });
-        \Route::middleware([])->delete('/resource/:id', function () {
+        \Route::middleware([])->delete('resource/{id}', function () {
             return [
                 'id' => 1,
                 'deleted' => true
@@ -68,8 +68,8 @@ class APIRoutesTest extends \Tests\TestCase
 
         $this->assertEquals($responseDocs, "openapi: 3.0.2
 info:
-  title: 'API Docs'
-  description: 'API Docs'
+  title: 'API '
+  description: ''
   version: '1.0'
 servers: []
 paths:
@@ -82,7 +82,7 @@ paths:
       parameters: []
       responses:
         '200':
-          description: 'Resposta com sucesso'
+          description: ''
           content:
             application/json:
               schema:
@@ -156,8 +156,8 @@ paths:
 
         $this->assertEquals("openapi: 3.0.2
 info:
-  title: 'API Docs'
-  description: 'API Docs'
+  title: 'API '
+  description: ''
   version: '1.0'
 servers: []
 paths:
@@ -185,13 +185,22 @@ paths:
             type: integer
           example: 1
       responses:
-        '404':
-          description: 'Resposta com sucesso'
+        '200':
+          description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: []
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: John
+                  age:
+                    type: string
+                    example: '10'
 ", $responseDocs);
 
     }
@@ -226,8 +235,8 @@ paths:
 
         $this->assertEquals("openapi: 3.0.2
 info:
-  title: 'API Docs'
-  description: 'API Docs'
+  title: 'API '
+  description: ''
   version: '1.0'
 servers: []
 paths:
@@ -255,13 +264,19 @@ paths:
             type: integer
           example: 1
       responses:
-        '404':
-          description: 'Resposta com sucesso'
+        '200':
+          description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: []
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  deleted:
+                    type: boolean
+                    example: true
       requestBody:
         content:
           application/json:
@@ -299,8 +314,8 @@ paths:
 
         $this->assertEquals($responseDocs, "openapi: 3.0.2
 info:
-  title: 'API Docs'
-  description: 'API Docs'
+  title: 'API '
+  description: ''
   version: '1.0'
 servers: []
 paths:
@@ -313,7 +328,7 @@ paths:
       parameters: []
       responses:
         '200':
-          description: 'Resposta com sucesso'
+          description: ''
           content:
             application/json:
               schema:
@@ -419,7 +434,7 @@ paths:
       parameters: []
       responses:
         '200':
-          description: 'Resposta com sucesso'
+          description: ''
           content:
             application/json:
               schema:

@@ -39,6 +39,6 @@ abstract class TestCase extends Orchestra
 
     protected function getPackageProviders($app)
     {
-        return [MakeProvider::class];
+        return [MakeProvider::class, \Devesharp\APIDocs\APIDocsProvider::class];
     }
 }
