@@ -467,9 +467,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function whereArrayInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->whereIn($column, $value);
 
@@ -478,9 +475,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function whereArrayNotInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->whereNotIn($column, $value);
 
@@ -489,9 +483,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function whereArrayString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $this->modelQuery = $this->modelQuery->whereIn($column, $value);
 
         return $this;
@@ -499,9 +490,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function whereArrayNotString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $this->modelQuery = $this->modelQuery->whereNotIn($column, $value);
 
         return $this;
@@ -658,9 +646,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function orWhereArrayInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         if (! is_array($value)) {
             $this->modelQuery = $this->modelQuery->orWhereRaw(
                 'FIND_IN_SET(?,' . $column . ')',
@@ -676,9 +661,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function orWhereArrayNotInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $value = array_map('intVal', $value);
         $this->modelQuery = $this->modelQuery->orWhereNotIn($column, $value);
 
@@ -687,9 +669,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function orWhereArrayString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $this->modelQuery = $this->modelQuery->orWhereIn($column, $value);
 
         return $this;
@@ -697,9 +676,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function orWhereArrayNotString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $this->modelQuery = $this->modelQuery->orWhereNotIn($column, $value);
 
         return $this;
@@ -913,9 +889,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function havingArrayInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -930,9 +903,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function havingArrayNotInt($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $value = array_map('intVal', $value);
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
@@ -947,9 +917,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function havingArrayString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
             return '?';
@@ -963,9 +930,6 @@ class RepositoryMysql extends RepositoryInterface
 
     public function havingArrayNotString($column, $value): self
     {
-        // If value is empty return all rows
-        if (empty($value)) return $this;
-
         $bind = range(0, count($value) - 1);
         $bind = array_map(function () {
             return '?';
