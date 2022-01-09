@@ -279,6 +279,10 @@ class APIDocsCreate
                         'properties' => $this->threeData($value, $options, $path . $newKey)
                     ];
 
+                    if (isset($options['description'][$path . $key])) {
+                        $valueKeys['description'] = $options['description'][$path . $key];
+                    }
+
                     foreach (array_keys($value) as $array_key) {
                         if (in_array($path . $newKey   .'.'. $array_key, $options['required'] ?? [])) {
                             $valueKeys['required'][] = $array_key;
@@ -357,6 +361,9 @@ class APIDocsCreate
     public function setTitle(string $title): void
     {
         $this->title = $title;
+
+        if(!empty($this->openAPIJSON))
+            $this->openAPIJSON->info->title = $title;
     }
 
     /**
@@ -365,6 +372,9 @@ class APIDocsCreate
     public function setDescription(string $description): void
     {
         $this->description = $description;
+
+        if(!empty($this->openAPIJSON))
+            $this->openAPIJSON->info->description = $description;
     }
 
     /**
@@ -376,6 +386,9 @@ class APIDocsCreate
             'url' => $url,
             'description' => $description,
         ];
+
+        if(!empty($this->openAPIJSON))
+            $this->openAPIJSON->servers = $this->servers;
     }
 
     public static function getInstance(): self

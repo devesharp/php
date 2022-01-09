@@ -5,11 +5,11 @@ info:
   version: '1.0'
 servers: []
 paths:
-  /resource2:
+  /resource:
     post:
       tags:
-        - Associações
-      summary: 'Criar Associações'
+        - Resources
+      summary: 'Create Post'
       description: ''
       parameters: []
       responses:
@@ -20,15 +20,28 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: John
+                        age:
+                          type: string
+                          example: '10'
+                    example:
+                      -
+                        id: 1
+                        name: John
+                        age: '10'
+                  count:
                     type: integer
                     example: 1
-                  name:
-                    type: string
-                    example: Leo
-                  age:
-                    type: string
-                    example: '10'
       requestBody:
         content:
           application/json:
@@ -37,40 +50,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Leona
-                  description: 'Nome do recurso'
+                  example: John
                 age:
-                  $ref: '#/components/schemas/AgeType'
-                item:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                  required:
-                    - id
-                active:
-                  type: boolean
-                  example: false
-                properties:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1
-                  example:
-                    -
-                      id: 1
-              required:
-                - name
-                - age
-components:
-  schemas:
-    AgeType:
-      type: string
-      description: ''
-      enum:
-        - vehicles
-        - events
+                  type: string
+                  example: John
