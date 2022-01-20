@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RepositoryMysql extends RepositoryInterface
 {
+    protected $primaryKey = 'id';
+
     /**
      * @var bool Verifica se tabela está deletada por "enabled"
      */
@@ -62,7 +64,7 @@ class RepositoryMysql extends RepositoryInterface
         $this->clearQuery();
 
         $model = $this->modelQuery
-            ->where((new $this->model())->getTable() . '.id', intval($id))
+            ->where((new $this->model())->getTable() . '.' . $this->primaryKey, intval($id))
             ->limit(1)
             ->first();
 
@@ -181,7 +183,7 @@ class RepositoryMysql extends RepositoryInterface
     public function deleteById($id, $auth = null)
     {
         $model = new $this->model();
-        $model = $model->where('id', $id);
+        $model = $model->where($this->primaryKey, $id);
 
         if ($this->softDelete) {
             if ($auth) {
