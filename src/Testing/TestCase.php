@@ -148,9 +148,9 @@ trait TestCase
             }
         }
 
-        if (!empty($args['query'] )) {
+        if (!empty($args['queries'] )) {
             $query = [];
-            foreach ($args['query'] as $param) {
+            foreach ($args['queries'] as $param) {
                 $query[] = $param['name'] . '=' . $param['value'];
             }
             $uriForTest = $uriForTest . '?' . implode('&', $query);
