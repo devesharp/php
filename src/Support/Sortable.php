@@ -87,7 +87,7 @@ trait Sortable
             ->where($this->orderColumnNameForeignKey, $this->id)
             ->first();
 
-        return $model->{$this->orderColumnName};
+        return $model->{$this->orderColumnName} ?? null;
     }
 
     /**
